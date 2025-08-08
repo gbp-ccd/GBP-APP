@@ -3,6 +3,7 @@ import { ChevronDown, X } from 'lucide-react';
 import proposalsData from './proposals_by_category.json';
 import { v4 as uuidv4 } from 'uuid';
 import logo from './assets/logo.png';
+import Airtable from 'airtable';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   WhatsappShareButton,
@@ -15,29 +16,7 @@ import {
   LinkedinIcon
 } from 'react-share';
 
-
-async function callAirtableAPI(payload) {
-  const res = await fetch('/.netlify/functions/airtable-update', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  const json = await res.json();
-  if (!json.ok) throw new Error(json.error || 'Airtable API error');
-  return json.records;
-}
-
-async function createRecord(table, fields) {
-  return await callAirtableAPI({ action: 'create', table, fields });
-}
-
-async function updateRecord(table, recordId, fields) {
-  return await callAirtableAPI({ action: 'update', table, recordId, fields });
-}
-
-async function selectRecords(table, filterByFormula = '', maxRecords = 1) {
-  return await callAirtableAPI({ action: 'select', table, filterByFormula, maxRecords });
-}
+const airtableBase = new Airtable({ apiKey: 'path3Ukx1qRJ8Dnyr.39728a9c6a0de42cea4a032af4293972588a86e08f9d45728a220821a4b8494c' }).base('appBtoRXEUDlndqrJ');
 
 const buckets = [
   'Critical to Me & Others',
@@ -272,29 +251,33 @@ useEffect(() => {
     submitted_at: new Date().toISOString(),
   };
 
-const submitInitialReflection = async () => {
-  console.log('Session ID:', session_id);
-  console.log('Assignment Array:', JSON.stringify(assignmentArray, null, 2));
-  console.log('Payload being sent to Airtable:', JSON.stringify(payload, null, 2));
-
-  try {
-    await createRecord('submissions', {
-      session_id,
-      fname: null,
-      lname: null,
-      email: null,
-      assignment: JSON.stringify(assignmentArray),
-      reflection_q2: reflectionAnswers.q2.toString(),
-      reflection_q3,
-      submitted_at: new Date().toISOString(),
-      reflection_q4: reflectionAnswers.q4.toString(),
-      version: APP_VERSION,
-    });
-    console.log('Initial reflection submitted to Airtable.');
-  } catch (err) {
-    console.error('Error submitting reflection to Airtable:', err);
-  }
-};
+  const submitInitialReflection = async () => {
+    console.log('Session ID:', session_id);
+    console.log('Assignment Array:', JSON.stringify(assignmentArray, null, 2));
+    console.log('Payload being sent to Airtable:', JSON.stringify(payload, null, 2));
+  
+    try {
+      await airtableBase('submissions').create([
+        {
+          fields: {
+            session_id,
+            fname: null,
+            lname: null,
+            email: null,
+            assignment: JSON.stringify(assignmentArray),
+            reflection_q2: reflectionAnswers.q2.toString(),
+            reflection_q3,
+            submitted_at: new Date().toISOString(),
+            reflection_q4: reflectionAnswers.q4.toString(),
+            version: APP_VERSION,  // Add this line
+          },
+        },
+      ]);
+      console.log('Initial reflection submitted to Airtable.');
+    } catch (err) {
+      console.error('Error submitting reflection to Airtable:', err);
+    }
+  };
   
   // Call it only when needed, like this:
   // DO NOT auto-submit on mount. Only submit from a controlled event.
@@ -312,42 +295,47 @@ const submitInitialReflection = async () => {
     return;
   }
 
-try {
-  await createRecord('details', {
-    session_id,
-    fname,
-    lname,
-    email,
-    zip,
-  });
-  console.log('Details submission successful');
-  setSubmitted(true);
-} catch (err) {
-  console.error('Error inserting details into Airtable:', err);
-} finally {
-  setIsSubmittingFinalForm(false);
-}
+  try {
+    await airtableBase('details').create([
+      {
+        fields: {
+          session_id,
+          fname,
+          lname,
+          email,
+          zip,
+        },
+      },
+    ]);
+    console.log('Details submission successful');
+    setSubmitted(true);
+  } catch (err) {
+    console.error('Error inserting details into Airtable:', err);
+  } finally {
+    setIsSubmittingFinalForm(false);
+  }
 };
+
   const isAssigned = (proposalId) => assignments.hasOwnProperty(proposalId);
   const progressPercent = (totalAssigned / totalProposals) * 100;
 
 // --- helpers (place near top-level of component) ---
 const getOrCreateRecordId = async (sessionId, initialFields = {}) => {
-  const found = await selectRecords(
-    'submissions',
-    `{session_id} = "${sessionId}"`,
-    1
-  );
+  const found = await airtableBase('submissions')
+    .select({ filterByFormula: `{session_id} = "${sessionId}"`, maxRecords: 1 })
+    .firstPage();
 
   if (found.length > 0) return found[0].id;
 
-  const created = await createRecord('submissions', { session_id: sessionId, ...initialFields });
+  const created = await airtableBase('submissions').create([
+    { fields: { session_id: sessionId, ...initialFields } },
+  ]);
   return created[0].id;
 };
 
 const upsertFields = async (sessionId, fields) => {
   const recordId = await getOrCreateRecordId(sessionId);
-  await updateRecord('submissions', recordId, fields);
+  await airtableBase('submissions').update(recordId, fields);
 };
 
 // --- handler: Submit My Ratings ---
