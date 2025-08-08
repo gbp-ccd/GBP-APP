@@ -99,7 +99,8 @@ function App() {
   const packageRef = React.useRef(null);
 const directionRef = React.useRef(null);
 const [isSubmittingQ2, setIsSubmittingQ2] = useState(false);
-const [setIsSubmittingFinalForm] = useState(false);
+// eslint-disable-next-line no-unused-vars
+const [isSubmittingFinalForm, setIsSubmittingFinalForm] = useState(false);
 const [isSubmittingQ3, setIsSubmittingQ3] = useState(false);
 const categoryRefs = useRef({});
 const reflectionStep2Ref = useRef(null);
