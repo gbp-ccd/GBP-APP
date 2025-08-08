@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, X } from 'lucide-react';
 import proposalsData from './proposals_by_category.json';
 import { v4 as uuidv4 } from 'uuid';
 import logo from './assets/logo.png';
 import Airtable from 'airtable';
-import { AnimatePresence, motion } from 'framer-motion';
 import {
   WhatsappShareButton,
   WhatsappIcon,
@@ -16,7 +15,7 @@ import {
   LinkedinIcon
 } from 'react-share';
 
-const airtableBase = new Airtable({ apiKey: 'path3Ukx1qRJ8Dnyr.39728a9c6a0de42cea4a032af4293972588a86e08f9d45728a220821a4b8494c' }).base('appBtoRXEUDlndqrJ');
+const airtableBase = new Airtable({ apiKey: 'patMsVAhp1Thpnxb2.65350b995395f62481b01efcdc9def813d84199bf71d97075014fcead71eec1a' }).base('appBtoRXEUDlndqrJ');
 
 const buckets = [
   'Critical to Me & Others',
@@ -37,12 +36,12 @@ const categoryOrder = [
 ];
 
 const categoryColors = {
-  'Economic Mobility and Growth': '#566bcb',
-  'K-12 Education': '#21c0c2',
-  'Healthcare': '#35c484',
-  'Energy Policy': '#fdc000',
-  'Taxes': '#af3e3e',
-  'Federal Spending & Debt': '#1e146f',
+  'Economic Mobility and Growth': '#4a6ab2',
+  'K-12 Education': '#46af93',
+  'Healthcare': '#cdc04b',
+  'Energy Policy': '#bd5aa7',
+  'Taxes': '#bd4f4f',
+  'Federal Spending & Debt': '#7c4fbd',
   
 };
 
@@ -55,11 +54,11 @@ const categoryDescriptions = {
 
 We thereby squander at least $2.3 trillion each year - which boosts the national debt; and shortchanges long-term investments in education, skills training and economic opportunity.`,
 
-  'Energy Policy': `THE PROBLEM: The federal government subsidizes both fossil fuels and renewables, which wastes hundreds of billions of dollars annually. America thereby fritters away valuable resources, while allowing extreme weather to injure millions of families by harming their environment and weakening the economy. `,
+  'Energy Policy': `THE PROBLEM: The federal government subsidizes both fossil fuels and renewables, which wastes hundreds of billions of dollars annually. America thereby fritters away valuable resources, while allowing extreme weather to injure millions of Americans, harm our environment and weaken the economy. `,
 
-'Taxes': `THE PROBLEM: Politicians from both parties routinely provide their strongest supporters with tax breaks, which boost the national debt and reward wasteful investments.`,
+'Taxes': `THE PROBLEM: Politicians from both parties routinely provide their strongest supporters with tax breaks, which boosts the national debt and rewards wasteful investments.`,
 
-   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036. This would send interest rates soaring, hobbling our economy. Yet both political parties have let the problem grow steadily worse for decades.`
+  'Federal Spending & Debt': `THE PROBLEM: The federal debt, which already equals 100 percent of GDP, is headed much higher. Yet, for decades, most voters have rejected efforts to prevent the debt from growing further. `
 
 };
 
@@ -70,37 +69,17 @@ function App() {
   const [expandedCategories, setExpandedCategories] = useState({});
   const [formData, setFormData] = useState({ fname: '', lname: '', email: '', zip: ''});
   const [submitted, setSubmitted] = useState(false);
-  const [reflectionStep, setReflectionStep] = useState(0);
+  const [reflectionStep, setReflectionStep] = useState(2);
   const [sessionId, setSessionId] = useState(null);
   const [showPackagePopup, setShowPackagePopup] = useState(false);
   const [showDirectionPopup, setShowDirectionPopup] = useState(false);
-  const APP_VERSION = 'General V3'; // or 'v1-students', 'v1-donors', etc.
+  const APP_VERSION = 'General V2'; // or 'v1-students', 'v1-donors', etc.
   const packageRef = React.useRef(null);
 const directionRef = React.useRef(null);
 const [isSubmittingQ2, setIsSubmittingQ2] = useState(false);
 const [isSubmittingFinalForm, setIsSubmittingFinalForm] = useState(false);
+const [isSubmittingQ4, setIsSubmittingQ4] = useState(false);
 const [isSubmittingQ3, setIsSubmittingQ3] = useState(false);
-const categoryRefs = useRef({});
-const reflectionStep2Ref = useRef(null);
-const totalAssigned = Object.keys(assignments).length;
-const totalProposals = Object.values(proposalsData).flat().length;
-const firstCategoryRef = useRef(null);
-const [readyToSubmit, setReadyToSubmit] = useState(false);
-const [ratingsSubmitted, setRatingsSubmitted] = useState(false);
-const [submitPromptShown, setSubmitPromptShown] = useState(false);
-const [isSubmittingRatings, setIsSubmittingRatings] = useState(false);
-const showForm = totalAssigned === totalProposals && !submitted && reflectionStep !== 0;
-
-const scrollToFirstCategory = () => {
-  setExpandedCategories(prev => ({ ...prev, 'Economic Mobility and Growth': true }));
-
-  setTimeout(() => {
-    if (firstCategoryRef.current) {
-      firstCategoryRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }, 100); // Delay gives React time to render the expanded section
-};
-
 
 useEffect(() => {
   if (showPackagePopup && packageRef.current) {
@@ -149,58 +128,26 @@ useEffect(() => {
   }, []);
 
 
-useEffect(() => {
-  if ((reflectionStep === 2 || reflectionStep === 3) && reflectionStep2Ref.current) {
-    setTimeout(() => {
-      reflectionStep2Ref.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-  }
-}, [reflectionStep]);
   const handleAssign = (proposalId, bucket) => {
-  setAssignments(prev => {
-    const newAssignments = { ...prev, [proposalId]: bucket };
-    return newAssignments;
-  });
-};
+    if (submitted) return;
+    setAssignments(prev => ({ ...prev, [proposalId]: bucket }));
+  };
 
   const handleUnassign = (proposalId) => {
-  if (submitted) return;
-
-  setAssignments(prev => {
-    const newAssignments = { ...prev };
-    delete newAssignments[proposalId];
-    return newAssignments;
-  });
-
-  setReadyToSubmit(false); // hide "Submit Ratings" button
-
-  // Auto-expand the category this proposal belongs to
-  const foundCategory = Object.entries(proposalsData).find(([cat, proposals]) =>
-    proposals.some(p => p.id.toString() === proposalId)
-  )?.[0];
-
-  if (foundCategory) {
-    toggleCategory(foundCategory);
-  }
-};
+    if (submitted) return;
+    setAssignments(prev => {
+      const newAssignments = { ...prev };
+      delete newAssignments[proposalId];
+      return newAssignments;
+    });
+  };
 
   const toggleCategory = (category) => {
-  setExpandedCategories(prev => {
-    const isExpanding = !prev[category];
-    const newState = { ...prev, [category]: !prev[category] };
-
-    if (isExpanding && !readyToSubmit && reflectionStep === 0) {
-      setTimeout(() => {
-        const el = categoryRefs.current[category];
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 300);
-    }
-
-    return newState;
-  });
-};
+    setExpandedCategories(prev => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -317,242 +264,205 @@ useEffect(() => {
 };
 
   const isAssigned = (proposalId) => assignments.hasOwnProperty(proposalId);
+  const totalAssigned = Object.keys(assignments).length;
+  const totalProposals = Object.values(proposalsData).flat().length;
   const progressPercent = (totalAssigned / totalProposals) * 100;
-
-// --- helpers (place near top-level of component) ---
-const getOrCreateRecordId = async (sessionId, initialFields = {}) => {
-  const found = await airtableBase('submissions')
-    .select({ filterByFormula: `{session_id} = "${sessionId}"`, maxRecords: 1 })
-    .firstPage();
-
-  if (found.length > 0) return found[0].id;
-
-  const created = await airtableBase('submissions').create([
-    { fields: { session_id: sessionId, ...initialFields } },
-  ]);
-  return created[0].id;
-};
-
-const upsertFields = async (sessionId, fields) => {
-  const recordId = await getOrCreateRecordId(sessionId);
-  await airtableBase('submissions').update(recordId, fields);
-};
-
-// --- handler: Submit My Ratings ---
-const handleSubmitRatings = async () => {
-  if (isSubmittingRatings) return;
-  setIsSubmittingRatings(true);
-
-  // Build assignment once
-  const assignmentArray = Object.entries(assignments).map(([id, bucket]) => {
-    const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
-    const category = Object.entries(proposalsData).find(([cat, list]) =>
-      list.some(p => p.id.toString() === id)
-    )?.[0];
-
-    return {
-      proposal_id: parseInt(id),
-      title: proposal?.title || '',
-      category,
-      bucket,
-      fname: formData.fname,
-      lname: formData.lname,
-      email: formData.email,
-      submitted_at: new Date().toISOString(),
-    };
-  });
-
-  try {
-    await upsertFields(sessionId, {
-      assignment: JSON.stringify(assignmentArray),
-      version: APP_VERSION,
-      submitted_at: new Date().toISOString(),
-    });
-
-    setRatingsSubmitted(true);
-    setReadyToSubmit(true);
-    setReflectionStep(3); // keep your existing flow
-  } catch (err) {
-    console.error('Error upserting Submit My Ratings:', err);
-  } finally {
-    setIsSubmittingRatings(false);
-  }
-};
-
-// --- handler: Q3 submit ---
-const handleSubmitQ3 = async () => {
-  if (isSubmittingQ3) return;
-  setIsSubmittingQ3(true);
-
-  try {
-    await upsertFields(sessionId, {
-      reflection_q3: (reflectionAnswers.q3 || '').toString(),
-      submitted_at: new Date().toISOString(),
-    });
-
-    setReflectionStep(2);
-    setShowDirectionPopup(false);
-  } catch (err) {
-    console.error('Error updating reflection_q3:', err);
-  } finally {
-    setIsSubmittingQ3(false);
-  }
-};
-
-// --- handler: Q2 choose ---
-const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whatever */) => {
-  if (isSubmittingQ2 || reflectionAnswers.q2 !== '') return;
-  setIsSubmittingQ2(true);
-
-  try {
-    await upsertFields(sessionId, {
-      reflection_q2: choice ? 'true' : 'false',
-      submitted_at: new Date().toISOString(),
-    });
-
-    setReflectionAnswers(prev => ({ ...prev, q2: choice }));
-    if (choice === true) {
-      setReflectionStep(0);
-      setShowPackagePopup(true);
-    } else {
-      setShowDirectionPopup(true);
-    }
-  } catch (err) {
-    console.error('Error updating reflection_q2:', err);
-  } finally {
-    setIsSubmittingQ2(false);
-  }
-};
-  
+  const showForm = totalAssigned === totalProposals && !submitted;
 
   return (
     <>
       {showIntroModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-start justify-center overflow-y-auto min-h-screen pt-10">
           <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-2xl p-4 sm:p-6 text-lg text-gray-800 space-y-4">
+          {introStep === 1 && (
+  <>
+  <p className="!text-2xl font-bold text-center">
+  <strong>Grand Bargain WebApp</strong>
+</p>
+<p className="text-center mb-2">
+  <strong>You Can Make a Historical Difference</strong>
+</p>
+  <p>Americans are more polarized than ever in our lifetimes – yet 96% of us agree that one or more of the following goals are critical to our own lives:</p>
+    <p>
+  <strong>Greater economic opportunity & growth</strong><br />
+  <strong>Schools that enable our kids to reach their potential</strong><br />
+  <strong>More effective & affordable healthcare</strong><br />
+  <strong>Lower national debt</strong><br />
+  <strong>Efficient, clean & reliable energy</strong><br />
+  <strong>A fairer, simpler tax code</strong>
+</p>
+    {/*  <div className="overflow-x-auto max-h-[350px] sm:max-h-[none] overflow-y-auto">
+  <table className="w-full text-sm text-left text-gray-700 border mt-4">
+        <thead className="bg-gray-100 text-xs uppercase">
+          <tr>
+            <th className="px-4 py-2">Aspirations</th>
+            <th className="px-4 py-2 text-center">Important to Me?</th>
+            <th className="px-4 py-2 text-center">Expect Congress to Act?</th>
+          </tr>
+        </thead>
+        <tbody>
+        {[
+  { key: 'economic', label: 'Boosting economic opportunity & growth' },
+  { key: 'education', label: 'Reforming education so students reach their potential' },
+  { key: 'healthcare', label: 'Making healthcare more effective and less costly' },
+  { key: 'debt', label: 'Lowering the national debt' },
+  { key: 'energy', label: 'Promoting more efficient, cleaner and reliable energy' },
+  { key: 'taxes', label: 'Making the tax code fairer and simpler' },
+].map(({ key, label }) => (
+  <tr key={key} className="border-t">
+    <td className="px-4 py-2">{label}</td>
+    <td className="px-4 py-2 text-center space-x-2">
+      <button
+        className={`px-2 py-1 rounded text-xs ${
+          aspirationAnswers[key]?.important === true
+            ? 'bg-[#142d95] text-white'
+            : 'bg-gray-200'
+        }`}
+        onClick={() =>
+          setAspirationAnswers(prev => ({
+            ...prev,
+            [key]: { ...prev[key], important: true }
+          }))
+        }
+      >
+        Y
+      </button>
+      <button
+        className={`px-2 py-1 rounded text-xs ${
+          aspirationAnswers[key]?.important === false
+            ? 'bg-[#142d95] text-white'
+            : 'bg-gray-200'
+        }`}
+        onClick={() =>
+          setAspirationAnswers(prev => ({
+            ...prev,
+            [key]: { ...prev[key], important: false }
+          }))
+        }
+      >
+        N
+      </button>
+    </td>
+    <td className="px-4 py-2 text-center space-x-2">
+      <button
+        className={`px-2 py-1 rounded text-xs ${
+          aspirationAnswers[key]?.progress === true
+            ? 'bg-[#142d95] text-white'
+            : 'bg-gray-200'
+        }`}
+        onClick={() =>
+          setAspirationAnswers(prev => ({
+            ...prev,
+            [key]: { ...prev[key], progress: true }
+          }))
+        }
+      >
+        Y
+      </button>
+      <button
+        className={`px-2 py-1 rounded text-xs ${
+          aspirationAnswers[key]?.progress === false
+            ? 'bg-[#142d95] text-white'
+            : 'bg-gray-200'
+        }`}
+        onClick={() =>
+          setAspirationAnswers(prev => ({
+            ...prev,
+            [key]: { ...prev[key], progress: false }
+          }))
+        }
+      >
+        N
+      </button>
+    </td>
+  </tr>
+))}
+        </tbody>
+      </table>
+  
+    </div>*/}
 
-          <AnimatePresence mode="wait">
-  <motion.div
-    key={introStep}
-    initial={{ opacity: 0, y: 10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    transition={{ duration: 0.3 }}
- >
-        {introStep === 1 && (
-  <div
-    className="p-[3px] rounded-xl"
-    style={{
-      background: 'linear-gradient(135deg, #f4b7b7 0%, #ffffff 50%, #8993d6 100%)',
-    }}
-  >
-    <div className="bg-white rounded-lg p-4 space-y-4">
-      <p className="!text-2xl font-bold text-center">
-        <strong>Grand Bargain WebApp</strong>
-      </p>
-      <p className="text-center mb-2">
-        <strong>Let's Create an America That Meets Your Aspirations</strong>
-      </p>
-      <p>
-        Americans seem to grow more divided each year. Yet we nearly all aspire for:
-      </p>
-      <p>
-        <strong>Greater economic opportunity & growth</strong><br />
-        <strong>Schools that enable our kids to reach their potential</strong><br />
-        <strong>More effective & affordable healthcare</strong><br />
-        <strong>Redirecting spending to lower the national debt</strong><br />
-        <strong>Dependable, clean & affordable energy</strong><br />
-        <strong>A fairer, simpler tax code</strong>
-      </p>
-      <div className="text-left mt-4">
-        <button
-          className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4"
-          onClick={() => setIntroStep(2)}
-        >
-          Next
+    <div className="text-right mt-4">
+    <button
+  className="bg-[#142d95] text-white px-4 py-2 rounded text-sm"
+  onClick={async () => {
+    setIntroStep(2); // move to the next step
+
+// COMMENTED OUT: Submitting intro reflections to Supabase
+// try {
+//   const { error } = await supabase.from('introreflections').insert([
+//     {
+//       session_id: sessionId,
+//       intro_reflections: aspirationAnswers
+//     }
+//   ]);
+
+//   if (error) {
+//     console.error('Error saving intro reflections:', error);
+//   } else {
+//     console.log('Intro reflections saved');
+//   }
+// } catch (err) {
+//   console.error('Unexpected error saving intro reflections:', err);
+// }
+  }}
+>
+  Next
+</button>
+    </div>
+  </>
+)}
+
+{introStep === 2 && (
+  <>
+    <p><strong>We nearly all share these aspirations,</strong> yet our political system puts them out of reach. Congress enacts each law, on each issue, to satisfy the majority party's supporters on that one issue.</p>
+    <p>Each bill thereby contradicts most others, wasting trillions of dollars and letting our chronic problems grow worse.</p>
+    <div className="text-right mt-4">
+      <button className="bg-[#142d95] text-white px-4 py-2 rounded text-sm" onClick={() => setIntroStep(3)}>
+        Next
+      </button>
+    </div>
+  </>
+)}
+
+{introStep === 3 && (
+  <>
+    <p><strong>To end this dysfunction, the Grand Bargain Project team</strong> gathered ideas from various sources, distilling them into 35 practical reforms that will:</p>
+    
+    <div className="leading-snug mt-[-0.5rem] font-bold">
+  <p className="m-0">Yield major progress in these six areas</p>
+  <p className="m-0">Work well together</p>
+  <p className="m-0">Boost efficiency and lower costs</p>
+  <p className="m-0">Significantly advance each American’s aspirations</p>
+</div>
+    <div className="text-right mt-4">
+      <button className="bg-[#142d95] text-white px-4 py-2 rounded text-sm" onClick={() => setIntroStep(4)}>
+        Next
+      </button>
+    </div>
+  </>
+)}
+
+{introStep === 4 && (
+  <>
+    <p><strong>Our purpose now is to refine the reforms to advance your goals.</strong></p>
+    <p>To that end, the next screens will ask you to rate each reform, and then evaluate the total package.</p>
+    <p>Our ambition is for over 75% of citizens, including many who differ from you, to agree on the end result.</p>
+    <p>Then, despite our differences, we can tell everyone in Washington:</p>
+   <p><strong><em>Move this package forward – now – or we'll find someone who will.</em></strong></p>
+
+    <div className="text-right">
+      <button className="bg-[#142d95] text-white px-4 py-2 rounded text-sm" onClick={() => setShowIntroModal(false)}>
+        Please Begin
         </button>
-      </div>
+            </div>
+          </>
+        )}
     </div>
   </div>
-)}
 
-        {introStep === 2 && (
-          <div className="animate-fade-in duration-300">
-  <div
-    className="p-[3px] rounded-xl"
-    style={{
-      background: 'linear-gradient(135deg, #f4b7b7 0%, #ffffff 50%, #8993d6 100%)',
-    }}
-  >
-    <div className="bg-white rounded-lg p-4 space-y-4">
-      <p><strong>We nearly all share these aspirations,</strong> yet our political system puts them out of reach.</p> 
-      <p>Each party enacts laws to satisfy its strongest supporters on a few issues, while letting our overall problems grow worse.</p>
-      <div className="text-left mt-4">
-        <button className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4" onClick={() => setIntroStep(3)}>
-          Next
-        </button>
-      </div>
-    </div>
-  </div>
-  </div>
+  
 )}
-
-        {introStep === 3 && (
-  <div
-    className="p-[3px] rounded-xl"
-    style={{
-      background: 'linear-gradient(135deg, #f4b7b7 0%, #ffffff 50%, #8993d6 100%)',
-    }}
-  >
-    <div className="bg-white rounded-lg p-4 space-y-4">
-      <p><strong>To advance all six aspirations that Americans share,</strong> we gathered ideas from various groups concerned about those issues.</p>
-      <p>We then distilled those ideas into 35 practical reforms that will:</p>
-      <div className="leading-snug mt-[-0.5rem] font-bold">
-        <p className="m-0">Yield major progress in each area</p>
-        <p className="m-0">Work well together</p>
-        <p className="m-0">Boost efficiency and lower costs</p>
-        <p className="m-0">Significantly improve each American’s life</p>
-      </div>
-      <div className="text-left mt-4">
-        <button className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4" onClick={() => setIntroStep(4)}>
-          Next
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-
-        {introStep === 4 && (
-  <div
-    className="p-[3px] rounded-xl"
-    style={{
-      background: 'linear-gradient(135deg, #f4b7b7 0%, #ffffff 50%, #8993d6 100%)',
-    }}
-  >
-    <div className="bg-white rounded-lg p-4 space-y-4">
-      <p><strong>77% of Americans in a recent YouGov survey chose this package of 35 reforms over the country’s current direction. </strong></p>
-      <p>To see how this Grand Bargain could benefit you, the next screens will ask you to:</p>
-      <div className="leading-snug mt-[-0.5rem] ">
-        <p className="m-0">1. Rate each reform</p>
-        <p className="m-0">2. Evaluate the total package</p>
-        <p className="m-0">3. If you have doubts, tell us why</p>
-        <p className="m-0">4. If you approve, we invite you to learn more about us.</p>
-      </div>
-      <div className="text-left">
-        <button className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4" onClick={() => setShowIntroModal(false)}>
-          Please Begin
-        </button>
-      </div>
-    </div>
-  </div>
-)}
-  </motion.div>
-</AnimatePresence>
-      </div>
-    </div>
-)}
-
-
 <div className="p-6 font-sans bg-white text-gray-800 min-h-screen">
   <div className="flex items-center justify-center gap-4 mb-6 flex-wrap">
     <img src={logo} alt="Grand Bargain Project" className="h-12 sm:h-14" />
@@ -585,53 +495,30 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
       </div>
 
       {!submitted && totalAssigned < totalProposals && (
-<div className="text-base sm:text-lg text-gray-800 mb-6 text-left border border-gray-300 rounded-xl p-5 sm:p-6 bg-white shadow-sm w-full space-y-2">
-  <p>At the bottom of the page, you will see <strong>the 6 policy areas</strong>. Each is in a different color.</p>
-
-  <div className="space-y-2">
-    <p className="font-semibold">By clicking on each bar, you will see:</p>
-    <ul className="list-disc pl-5 list-inside space-y-1 text-gray-700">
-      <li>Description of the basic problem</li>
-      <li><strong>Overall</strong> description of our proposals</li>
-      <li>Description of <strong>each</strong> proposal</li>
-      <div style={{ height: '0.5rem' }} />
-      </ul>
-      <strong>You can rate either: The overall proposal OR each <em>individual proposal</em></strong>
-      <ul className="list-disc pl-5 list-inside space-y-1 text-gray-700">
-    </ul>
-  </div>
-
-  <p className="font-semibold text-[#142d95]">Please focus on proposals that really matter to you.</p>
-  <ul className="list-disc pl-5 list-inside space-y-1 text-gray-700">
-  <li className="italic">Any that seem unclear or vague, just rate <strong>Not Sure</strong></li>
-  </ul>
-  <div style={{ height: '0.5rem' }} />
-
-
-    <div className="flex justify-left mt-4">
-      <button
-  onClick={scrollToFirstCategory}
-  className="bg-[#142d95] text-white px-6 py-2 rounded-lg text-base sm:text-lg shadow hover:bg-[#0f2275] transition mt-4"
->
-  Start Rating
-</button>
-    </div>
+  <div className="text-xl font-regular mb-4 text-center border border-gray-300 rounded-md p-4 bg-gray-50 w-fit mx-auto space-y-4">
+    <p>You will see the 6 policy areas at the bottom of this page, each a different color</p> 
+    <p><strong>By clicking on each bar, you will see:</strong></p>
+    <p>Description of the basic problem</p> 
+    <p>Overall description of the Grand Bargain proposals</p> 
+    <p>Description of <em>each</em> proposal</p> 
+     <p>5 ways to rate each proposal - from Critical To Me and Others, to Hate It</p> 
+    <p>
+      <strong>Option one:</strong> You can rate<span className="bg-blue-100 rounded px-1">the Overall Proposal</span>in each area
+    </p> 
+    <p><strong>Option two:</strong> Or you can rate <em>each proposal</em></p> 
+    <p><strong>Please focus on proposals that really matter. If any strike you as unclear or vague, just click <em>Not Sure</em></strong></p> 
   </div>
 )}
       <div className="flex flex-col lg:flex-row gap-4 mb-6">
   {buckets.map(bucket => (
     <div
-  key={bucket}
-      className="relative bg-white border border-gray-200 rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
+      key={bucket}
+      className="bg-[#f9f9fc] border border-[#101761] rounded-lg shadow p-3 flex-1 min-w-[180px]"
     >
-      <div
-  className="absolute top-0 left-0 h-1 w-full rounded-t-md bg-gray-400"
-/>
-      <h2 className="text-sm font-semibold text-gray-800 tracking-wide pt-2">
+      <h2 className="text-sm font-semibold text-[#101761] mb-2 text-center">
         {bucket}
       </h2>
       <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-
         {Object.entries(assignments)
           .filter(([_, b]) => b === bucket)
           .map(([id]) => {
@@ -648,148 +535,233 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
             const bg = categoryColors[category] || '#eee';
             return (
               <div
-  key={id}
-  className="p-2 rounded text-xs shadow-sm border border-gray-300 flex justify-between items-start gap-2"
-  style={{ backgroundColor: `${bg}1A` }} // 10% tint of the category color
->
-  <div className="flex justify-between items-center gap-2">
-    <span className="whitespace-pre-line">{proposal.title}</span>
-    {!(ratingsSubmitted && totalAssigned === totalProposals) && (
-  <button
-    onClick={() => handleUnassign(id)}
-    className="text-gray-500 hover:text-red-500"
-    title="Remove from bucket"
-  >
-    <X size={20} />
-  </button>
-)}
-  </div>
-</div>
+                key={id}
+                className="p-2 rounded text-xs shadow-sm border border-gray-300 flex justify-between items-start gap-2"
+                style={{ backgroundColor: `${bg}26` }}
+              >
+                <span>{proposal.title}</span>
+                {!submitted && totalAssigned < totalProposals && (
+                  <button
+                    onClick={() => handleUnassign(id)}
+                    className="text-gray-500 hover:text-red-500"
+                    title="Remove from bucket"
+                  >
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
             );
           })}
       </div>
     </div>
   ))}
 </div>
-{(() => {
-  if (totalAssigned === totalProposals && !readyToSubmit && !submitted) {
-    if (!submitPromptShown) setSubmitPromptShown(true);
-    return true;
-  }
-  return false;
-})() && (
+
+
+      {showForm && reflectionStep !== 0 && (
   <div className="bg-green-50 border border-green-200 p-4 rounded mb-6">
-  <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
-    <div className="text-center mt-6 mb-8">
-      <p className="mb-4 text-lg text-gray-700">
-        If you have changed your mind about any ratings, you can go to the top of the page to 'x' those proposals. Then, you can re-rate those items.
-      </p>
-      <p className="mb-4 text-lg text-gray-700">
-        When you're ready, click <strong>Submit My Ratings</strong>.
-      </p>
-      <button
-        onClick={handleSubmitRatings}
-        disabled={isSubmittingRatings}
-        className="bg-[#142d95] text-white px-6 py-3 rounded text-base font-semibold hover:bg-[#101761] transition"
-      >
-        {isSubmittingRatings ? 'Submitting...' : 'Submit My Ratings'}
-      </button>
-    </div>
-  </div>
-</div>
+    <div className="bg-white p-4 rounded shadow-sm">
 
-)}
-
-{(reflectionStep === 2 || reflectionStep === 3) && (
-  <div
-    ref={reflectionStep2Ref}
-    className="rounded-lg shadow-lg p-1 mb-6"
-    style={{ background: 'linear-gradient(135deg, #e0f2f1, #e8f5e9, #ffffff)' }}
+    {reflectionStep === 2 && (
+  <div className="space-y-4 text-lg font-medium text-gray-800 mb-4">
+    <p>The above reforms that you like or see as critical have been around for years. Congress has enacted none of them.</p>
+    <p>The reason: Most Congresspeople blame the other party for the country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
+    <p>To change this situation, we the American people need to find a total package that 75% or more of us support. Lawmakers who wanted to keep their seats would then need to act.</p>
+    <p>So far, 71% of voters who have used this App preferred this package over the country’s current direction.</p>
+    <p>Do you expect this Congress and Administration to offer a better deal? </p>
+  <div className="flex gap-4 mb-4">
+  <button
+    className={`px-4 py-2 rounded text-sm ${
+      isSubmittingQ4
+        ? 'bg-gray-300 text-gray-600'
+        : reflectionAnswers.q4 === true
+        ? 'bg-[#142d95] text-white'
+        : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
+    }`}
+    disabled={isSubmittingQ4 || reflectionAnswers.q4 !== ''}
+    onClick={async () => {
+      if (isSubmittingQ4 || reflectionAnswers.q4 !== '') return;
+      setIsSubmittingQ4(true);
+      setTimeout(() => {
+        setReflectionAnswers(prev => ({ ...prev, q4: true }));
+        setIsSubmittingQ4(false);
+      }, 300); // brief delay to show "Submitting..." state
+    }}
   >
-    <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
-      {reflectionStep === 2 && (
-        <div className="space-y-5 text-base sm:text-lg text-gray-800">
-          <div className="rounded text-base sm:text-lg text-gray-800">
-            Our goal is to soon tell every lawmaker: <em>These reforms embody the aspirations of the American people. Make this package a priority – or we'll elect someone else.</em>
-          </div>
-          <p className="text-base sm:text-lg mb-4">
-            So, which would you prefer: Telling members of Congress to work on this Grand Bargain – or leave your future in their hands?
-          </p>
+    {isSubmittingQ4 ? 'Submitting...' : 'Yes'}
+  </button>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-left">
-            <button
-              className={`px-5 py-2 rounded text-sm shadow ${
-                reflectionAnswers.q2 === true
-                  ? 'bg-[#142d95] text-white'
-                  : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
-              } transition`}
-              disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
-              onClick={() => handleChooseQ2(true)}
-            >
-              {isSubmittingQ2 ? 'Submitting...' : 'Grand Bargain'}
-            </button>
+  <button
+    className={`px-4 py-2 rounded text-sm ${
+      isSubmittingQ4
+        ? 'bg-gray-300 text-gray-600'
+        : reflectionAnswers.q4 === false
+        ? 'bg-[#142d95] text-white'
+        : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
+    }`}
+    disabled={isSubmittingQ4 || reflectionAnswers.q4 !== ''}
+    onClick={async () => {
+      if (isSubmittingQ4 || reflectionAnswers.q4 !== '') return;
+      setIsSubmittingQ4(true);
+      setTimeout(() => {
+        setReflectionAnswers(prev => ({ ...prev, q4: false }));
+        setIsSubmittingQ4(false);
+      }, 300);
+    }}
+  >
+    {isSubmittingQ4 ? 'Submitting...' : 'No'}
+  </button>
+</div>
+    <p>So, which would you prefer: This Grand Bargain or letting Congress decide our direction?</p>
 
+    <div className="flex gap-4">
             <button
-              className={`px-5 py-2 rounded text-sm shadow ${
-                reflectionAnswers.q2 === false
-                  ? 'bg-[#142d95] text-white'
-                  : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
-              } transition`}
-              disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
-              onClick={() => handleChooseQ2(false)}
-            >
-              {isSubmittingQ2 ? 'Submitting...' : 'Whatever Congress Decides'}
-            </button>
+  className={`px-4 py-2 rounded text-sm ${
+    reflectionAnswers.q2 === true
+      ? 'bg-[#142d95] text-white'
+      : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
+  }`}
+  disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
+  onClick={async () => {
+    if (reflectionAnswers.q2 !== '' || isSubmittingQ2) return;
+
+    setIsSubmittingQ2(true);
+    try {
+      await airtableBase('submissions').create([
+        {
+          fields: {
+            session_id: sessionId,
+            assignment: JSON.stringify(assignmentArray),
+            reflection_q2: "true", 
+            reflection_q3: '',
+            reflection_q4: reflectionAnswers.q4.toString(),
+            submitted_at: new Date().toISOString(),
+            version: APP_VERSION,
+          },
+        },
+      ]);
+      setReflectionAnswers(prev => ({ ...prev, q2: true }));
+      setReflectionStep(0);
+      setShowPackagePopup(true);
+    } catch (err) {
+      console.error('Error submitting reflection to Airtable:', err);
+    } finally {
+      setIsSubmittingQ2(false);
+    }
+  }}
+>
+  {isSubmittingQ2 ? 'Submitting...' : 'Grand Bargain'}
+</button>
+
+<button
+  className={`px-4 py-2 rounded text-sm ${
+    reflectionAnswers.q2 === false
+      ? 'bg-[#142d95] text-white'
+      : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
+  }`}
+  disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
+  onClick={async () => {
+    if (reflectionAnswers.q2 !== '' || isSubmittingQ2) return;
+
+    setIsSubmittingQ2(true);
+    try {
+      setReflectionAnswers(prev => ({ ...prev, q2: false }));
+      setReflectionStep(3);
+    } finally {
+      setIsSubmittingQ2(false);
+    }
+  }}
+>
+  {isSubmittingQ2 ? 'Submitting...' : 'Current Direction'}
+</button>
           </div>
         </div>
       )}
 
       {reflectionStep === 3 && (
         <div>
-          <p className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-            The reforms that you rated positively have been around for years. Congress has enacted none of them.
+          <p className="mb-4 text-lg font-medium text-gray-800">
+          What changes would get you to support the total package - that you think more than 75% of the
+country would accept?
           </p>
-          <div className="text-base sm:text-lg space-y-3 mb-7 leading-relaxed">
-            <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
-            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support. To that end, we keep testing variations.</p>
-            <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
-            <p>We would welcome your ideas — for changes or additions — that might get more of the American people on board. Please type your suggestions in here.</p>
-          </div>
-
           <textarea
-            className="w-full border border-gray-300 rounded p-2 text-sm mb-4 space-y-3"
+            className="w-full border border-gray-300 rounded p-2 text-sm mb-4"
             rows={4}
             placeholder="Your answer..."
             value={reflectionAnswers.q3}
-            onChange={e => setReflectionAnswers(prev => ({ ...prev, q3: e.target.value }))}
+            onChange={e =>
+              setReflectionAnswers(prev => ({ ...prev, q3: e.target.value }))
+            }
           />
           <button
-            className="bg-[#142d95] text-white px-4 py-2 rounded text-sm mb-4"
-            onClick={handleSubmitQ3}
-            disabled={isSubmittingQ3}
-          >
-            {isSubmittingQ3 ? 'Submitting...' : 'Continue'}
-          </button>
-        </div>
-      )}
-    </div>
+            className="bg-[#142d95] text-white px-4 py-2 rounded text-sm"
+            onClick={async () => {
+              if (isSubmittingQ3) return;
+              setIsSubmittingQ3(true);
+              const assignmentArray = Object.entries(assignments).map(([id, bucket]) => {
+                const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
+                const category = Object.entries(proposalsData).find(([cat, list]) =>
+                  list.some(p => p.id.toString() === id)
+                )?.[0];
+                return {
+                  proposal_id: parseInt(id),
+                  title: proposal?.title || '',
+                  category,
+                  bucket,
+                  fname: formData.fname,
+                  lname: formData.lname,
+                  email: formData.email,
+                  submitted_at: new Date().toISOString()
+                };
+              });
+
+              try {
+                await airtableBase('submissions').create([
+                  {
+                    fields: {
+                      session_id: sessionId,
+                      assignment: JSON.stringify(assignmentArray),
+                      reflection_q2: reflectionAnswers.q2.toString(),
+                      reflection_q3: reflectionAnswers.q3.toString(),
+                      reflection_q4: reflectionAnswers.q4.toString(),
+                      submitted_at: new Date().toISOString(),
+                      version: APP_VERSION,  // Add this line
+                    },
+                  },
+                ]);
+                setReflectionStep(0);
+                setShowDirectionPopup(true);
+              } catch (err) {
+          console.error('Error submitting Q3 reflection to Airtable:', err);
+        } finally {
+          setIsSubmittingQ3(false);
+        }
+      }}
+    >
+      {isSubmittingQ3 ? 'Submitting...' : 'Submit'}
+    </button>
   </div>
 )}
 
+    </div>
+  </div>
+)}
 {showPackagePopup && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-start justify-center overflow-y-auto min-h-screen pt-10">
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-start justify-center overflow-y-auto min-h-screen pt-40">
     <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-2xl p-4 sm:p-6 text-lg text-gray-800 space-y-4">
     <div className="bg-white p-4 rounded shadow-sm">
       {/* Display the message at the top */}
       {!submitted && (
   <>
     <p className="text-xl font-bold text-gray-800 mb-4">
-    You see the value in the Grand Bargain. Please join us!
+    You see the value in the Grand Bargain. Join us!
 </p>
 <p className="text-xl italic text-gray-700">
 Sign our petition that will go to Congress and the Administration
 <br /><br />
-You will receive our newsletter & have the opportunity to become part of this national movement
+You will recieve our newsletter 
+<br /><br />
+You will become part of this national movement
 </p>
 
     <div className="h-4" /> {/* Spacer */}
@@ -945,7 +917,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
   </div>
 )}
 {showDirectionPopup && (
-  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-start justify-center overflow-y-auto min-h-screen pt-10">
+  <div className="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-start justify-center overflow-y-auto min-h-screen pt-40">
     <div className="bg-white rounded-lg shadow-xl w-[90%] max-w-2xl p-4 sm:p-6 text-xl text-gray-800 space-y-4">
     <div className="bg-white p-4 rounded shadow-sm">
       {/* Display the message at the top */}
@@ -1110,135 +1082,103 @@ One simple question. To get the policy reforms that you see as critical to you, 
 )}
 
 
-{!submitted && totalAssigned < totalProposals && categoryOrder.map((category, index) => {
+{!submitted && totalAssigned < totalProposals && categoryOrder.map(category => {
   const proposals = proposalsData[category] || [];
   const bgColor = categoryColors[category] || '#142d95';
   const remainingProposals = proposals.filter(p => !isAssigned(p.id));
   const isEmpty = remainingProposals.length === 0;
 
   return (
-    <div
-      key={category}
-      ref={el => {
-  categoryRefs.current[category] = el;
-  if (index === 0 && !firstCategoryRef.current) {
-    firstCategoryRef.current = el;
-  }
-}}
-      className="mb-6"
-    >
+    <div key={category} className="mb-6">
       <button
         onClick={() => toggleCategory(category)}
-        className="w-full text-left px-4 py-3 rounded flex items-center justify-between text-shadow"
-        style={{
-          backgroundColor: bgColor,
-          color: 'white',
-          height: isEmpty ? '12px' : 'auto',
-          opacity: isEmpty ? 0.5 : 1,
-          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.5)',
-        }}
+        className="w-full text-left px-4 py-3 rounded flex items-center justify-between"
+        style={{ backgroundColor: bgColor, color: 'white', height: isEmpty ? '12px' : 'auto', opacity: isEmpty ? 0.5 : 1 }}
       >
         {!isEmpty && <span className="font-semibold">{category}</span>}
         <ChevronDown size={20} className={`transition-transform ${expandedCategories[category] ? 'rotate-180' : ''}`} />
       </button>
-
-      <AnimatePresence mode="wait">
-        {expandedCategories[category] && (
-  <motion.div
-  initial={{ opacity: 0, scaleY: 0 }}
-  animate={{ opacity: 1, scaleY: 1 }}
-  transition={{ duration: 0.3 }}
-  style={{ transformOrigin: 'top' }}
->
-    <div className="space-y-4">
-            {categoryDescriptions[category] && (
-              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 italic text-base sm:text-lg text-gray-700">
-                {categoryDescriptions[category]}
-              </div>
-            )}
-            {(!submitPromptShown || category === 'Federal Spending & Debt') && (
-            <div className="text-base sm:text-lg text-gray-800 whitespace-pre-line mt-4 mb-6 pl-3 pr-3 pt-4 pb-6 italic bg-blue-100 border-l-4 border-blue-400 rounded">
-              <strong>THE OVERALL PROPOSAL:</strong>{' '}
-              {category === 'Economic Mobility and Growth' && (
-                <>Provide low-paid workers with the skills to move up the economic ladder. Incentivize underemployed Americans to more fully participate in the workforce. Promote basic research and entrepreneurship. End obstacles to building new affordable housing.</>
-              )}
-              {category === 'K-12 Education' && (<>Provide teachers with the training and resources to significantly boost their students’ learning. Hold teachers and schools to account for producing results. Incentivize parents to support their children’s education.</>)}
-              {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
-              {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
-              {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year: The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> The Value Added Tax would add $200 billion in annual revenue<br /> Carbon pricing would also yield $200 billion in revenue<br /><br />Also, to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
-              <div className="flex flex-wrap gap-2 mt-4">
-                {buckets.map(bucket => (
-                  <button
-                    key={bucket}
-                    onClick={() => {
-                      if (category === 'Federal Spending & Debt') {
-                        const overallProposal = proposalsData[category].find(p => p.title === 'Federal Spending & Debt Overall Proposal');
-                        if (overallProposal) {
-                          setAssignments(prev => ({
-                            ...prev,
-                            [overallProposal.id]: bucket,
-                          }));
-                        }
-                      } else {
-                        const remaining = proposalsData[category].filter(p => !isAssigned(p.id));
-                        const newAssignments = {};
-                        remaining.forEach(p => {
-                          newAssignments[p.id] = bucket;
-                        });
-                        setAssignments(prev => ({ ...prev, ...newAssignments }));
-                      }
-                    }}
-                    className="bg-white border border-[#dbabbf] text-[#101761] hover:bg-pink-100 px-3 py-1 rounded text-xs font-semibold transition"
-                  >
-                    {bucket}
-                  </button>
-                ))}
-              </div>
+      {expandedCategories[category] && (
+        <>
+          {categoryDescriptions[category] && (
+            <div className="text-lg text-gray-700 whitespace-pre-line mt-4 mb-2 pl-3 italic bg-yellow-100">
+              {categoryDescriptions[category]}
             </div>
+          )}
+          
+          <div className="text-lg text-gray-800 whitespace-pre-line mt-4 mb-6 pl-3 pr-3 pt-4 pb-6 italic bg-blue-100 rounded">
+            <strong>THE OVERALL PROPOSAL:</strong>{' '}
+            {category === 'Economic Mobility and Growth' && (
+              <>Provide workers with low paying jobs the skills to move up the economic ladder. Incentivize underemployed Americans to more fully participate in the workforce. Promote basic research and entrepreneurship. Eliminate obstacles to building new affordable housing.</>
             )}
-            {category !== 'Federal Spending & Debt' && (
-              <div className="text-lg text-gray-700 whitespace-pre-line mt-4 mb-2 pl-3 italic">
-                The individual proposals:
-              </div>
-            )}
-
-            <AnimatePresence mode="popLayout">
-              {remainingProposals
-                .filter(p => p.title && p.title.trim() !== '' && !(category === 'Federal Spending & Debt' && p.title === 'Federal Spending & Debt Overall Proposal'))
-                .map(({ id, title }) => (
-                  <motion.div
-                    key={id}
-                    initial={{ opacity: 0, scale: 0.95, y: -6 }}
-                    animate={{ opacity: 1, scale: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95, y: 6 }}
-                    transition={{ duration: 0.25 }}
-                    className="bg-white border border-gray-200 p-4 rounded-md shadow-md mb-4"
-                  >
-                    {title && (
-                      <p className="font-bold text-base mb-4">{title}</p>
-                    )}
-                    {title !== 'Federal Spending & Debt Overall Proposal' && (
-                      <div className="flex flex-wrap gap-2">
-                        {buckets.map(bucket => (
-                          <button
-                            key={bucket}
-                            onClick={() => handleAssign(id, bucket)}
-                            className="bg-white border border-[#dbabbf] text-[#101761] hover:bg-pink-100 px-3 py-1 rounded text-xs font-semibold transition"
-                          >
-                            {bucket}
-                          </button>
-                        ))}
-                      </div>
-                    )}
-                    
-                  </motion.div>
-                ))}
-            </AnimatePresence>
+            {category === 'K-12 Education' && (<>Provide teachers with the training and resources to significantly boost their students’ learning. Hold teachers and schools to account for producing results. Incentivize parents to support their children’s education.</>)}
+            {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
+            {category === 'Energy Policy' && (<>Provide Americans, businesses, state governments and other countries with incentives to use energy efficiently by: 1) Eliminating wasteful subsidies, mandates and regulations. 2) Taxing carbon emissions that make droughts, floods, hurricanes, blizzards and wildfires more extreme each year. 3) Transmitting energy in ways that minimize the costs to consumers.</>)}
+            {category === 'Taxes' && (<>To generate enough revenue to pay for the benefits in health, education and economic opportunity described in previous sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Make entitlement spending more efficient. Incentivize businesses to invest in assets that will increase productivity, future income – and future tax revenue.</>)}
+            {category === 'Federal Spending & Debt' && (<>To avoid failures of the past, in this Grand Bargain: <br /><br />1) The Mobility, Education, Healthcare and Energy proposals would boost productivity and economic growth.<br /> 2) The Healthcare proposals would reduce costs and increase productivity.<br /> 3) The Tax and Energy proposals would raise revenue and increase efficiency.<br /><br /> <strong>The result: The debt - as a percentage of the overall economy - would steadily decline.</strong> </>)}
+            <div className="flex flex-wrap gap-2 mt-4">
+              {buckets.map(bucket => (
+                <button
+                  key={bucket}
+                  onClick={() => {
+  if (category === 'Federal Spending & Debt') {
+    const overallProposal = proposalsData[category].find(p => p.title === 'Federal Spending & Debt Overall Proposal');
+    if (overallProposal) {
+      setAssignments(prev => ({
+        ...prev,
+        [overallProposal.id]: bucket,
+      }));
+    }
+  } else {
+    const remaining = proposalsData[category].filter(p => !isAssigned(p.id));
+    const newAssignments = {};
+    remaining.forEach(p => {
+      newAssignments[p.id] = bucket;
+    });
+    setAssignments(prev => ({ ...prev, ...newAssignments }));
+  }
+}}
+                  className="bg-white border border-[#dbabbf] text-[#101761] hover:bg-pink-100 px-3 py-1 rounded text-xs font-semibold transition"
+                >
+                  {bucket}
+                </button>
+              ))}
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+
+          {category !== 'Federal Spending & Debt' && (
+  <div className="text-lg text-gray-700 whitespace-pre-line mt-4 mb-2 pl-3 italic">
+    The individual proposals:
+  </div>
+)}
+
+{remainingProposals
+  .filter(p => p.title && p.title.trim() !== '' && !(category === 'Federal Spending & Debt' && p.title === 'Federal Spending & Debt Overall Proposal'))
+  .map(({ id, title }) => (
+    <div
+      key={id}
+      className="bg-white border border-gray-200 p-4 rounded shadow hover:shadow-md text-sm"
+    >
+      {title && (
+  <p className="font-bold text-base mb-2">{title}</p>
+)}
+      {title !== 'Federal Spending & Debt Overall Proposal' && (
+        <div className="flex flex-wrap gap-2">
+          {buckets.map(bucket => (
+            <button
+              key={bucket}
+              onClick={() => handleAssign(id, bucket)}
+              className="bg-white border border-[#dbabbf] text-[#101761] hover:bg-pink-100 px-3 py-1 rounded text-xs font-semibold transition"
+            >
+              {bucket}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+))}
+        </>
+      )}
     </div>
   );
 })}

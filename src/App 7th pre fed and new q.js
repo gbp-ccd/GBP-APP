@@ -59,7 +59,7 @@ We thereby squander at least $2.3 trillion each year - which boosts the national
 
 'Taxes': `THE PROBLEM: Politicians from both parties routinely provide their strongest supporters with tax breaks, which boost the national debt and reward wasteful investments.`,
 
-   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036. This would send interest rates soaring, hobbling our economy. Yet both political parties have let the problem grow steadily worse for decades.`
+   'Federal Spending & Debt': `THE PROBLEM: The federal debt, which now equals 100% of GDP, will reach 120% by 2036. Yet both political parties keep ducking the problem - by offering solutions they know most voters will reject.`
 
 };
 
@@ -88,7 +88,6 @@ const firstCategoryRef = useRef(null);
 const [readyToSubmit, setReadyToSubmit] = useState(false);
 const [ratingsSubmitted, setRatingsSubmitted] = useState(false);
 const [submitPromptShown, setSubmitPromptShown] = useState(false);
-const [isSubmittingRatings, setIsSubmittingRatings] = useState(false);
 const showForm = totalAssigned === totalProposals && !submitted && reflectionStep !== 0;
 
 const scrollToFirstCategory = () => {
@@ -319,110 +318,7 @@ useEffect(() => {
   const isAssigned = (proposalId) => assignments.hasOwnProperty(proposalId);
   const progressPercent = (totalAssigned / totalProposals) * 100;
 
-// --- helpers (place near top-level of component) ---
-const getOrCreateRecordId = async (sessionId, initialFields = {}) => {
-  const found = await airtableBase('submissions')
-    .select({ filterByFormula: `{session_id} = "${sessionId}"`, maxRecords: 1 })
-    .firstPage();
 
-  if (found.length > 0) return found[0].id;
-
-  const created = await airtableBase('submissions').create([
-    { fields: { session_id: sessionId, ...initialFields } },
-  ]);
-  return created[0].id;
-};
-
-const upsertFields = async (sessionId, fields) => {
-  const recordId = await getOrCreateRecordId(sessionId);
-  await airtableBase('submissions').update(recordId, fields);
-};
-
-// --- handler: Submit My Ratings ---
-const handleSubmitRatings = async () => {
-  if (isSubmittingRatings) return;
-  setIsSubmittingRatings(true);
-
-  // Build assignment once
-  const assignmentArray = Object.entries(assignments).map(([id, bucket]) => {
-    const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
-    const category = Object.entries(proposalsData).find(([cat, list]) =>
-      list.some(p => p.id.toString() === id)
-    )?.[0];
-
-    return {
-      proposal_id: parseInt(id),
-      title: proposal?.title || '',
-      category,
-      bucket,
-      fname: formData.fname,
-      lname: formData.lname,
-      email: formData.email,
-      submitted_at: new Date().toISOString(),
-    };
-  });
-
-  try {
-    await upsertFields(sessionId, {
-      assignment: JSON.stringify(assignmentArray),
-      version: APP_VERSION,
-      submitted_at: new Date().toISOString(),
-    });
-
-    setRatingsSubmitted(true);
-    setReadyToSubmit(true);
-    setReflectionStep(3); // keep your existing flow
-  } catch (err) {
-    console.error('Error upserting Submit My Ratings:', err);
-  } finally {
-    setIsSubmittingRatings(false);
-  }
-};
-
-// --- handler: Q3 submit ---
-const handleSubmitQ3 = async () => {
-  if (isSubmittingQ3) return;
-  setIsSubmittingQ3(true);
-
-  try {
-    await upsertFields(sessionId, {
-      reflection_q3: (reflectionAnswers.q3 || '').toString(),
-      submitted_at: new Date().toISOString(),
-    });
-
-    setReflectionStep(2);
-    setShowDirectionPopup(false);
-  } catch (err) {
-    console.error('Error updating reflection_q3:', err);
-  } finally {
-    setIsSubmittingQ3(false);
-  }
-};
-
-// --- handler: Q2 choose ---
-const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whatever */) => {
-  if (isSubmittingQ2 || reflectionAnswers.q2 !== '') return;
-  setIsSubmittingQ2(true);
-
-  try {
-    await upsertFields(sessionId, {
-      reflection_q2: choice ? 'true' : 'false',
-      submitted_at: new Date().toISOString(),
-    });
-
-    setReflectionAnswers(prev => ({ ...prev, q2: choice }));
-    if (choice === true) {
-      setReflectionStep(0);
-      setShowPackagePopup(true);
-    } else {
-      setShowDirectionPopup(true);
-    }
-  } catch (err) {
-    console.error('Error updating reflection_q2:', err);
-  } finally {
-    setIsSubmittingQ2(false);
-  }
-};
   
 
   return (
@@ -679,42 +575,58 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
   return false;
 })() && (
   <div className="bg-green-50 border border-green-200 p-4 rounded mb-6">
-  <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
-    <div className="text-center mt-6 mb-8">
-      <p className="mb-4 text-lg text-gray-700">
-        If you have changed your mind about any ratings, you can go to the top of the page to 'x' those proposals. Then, you can re-rate those items.
-      </p>
-      <p className="mb-4 text-lg text-gray-700">
-        When you're ready, click <strong>Submit My Ratings</strong>.
-      </p>
-      <button
-        onClick={handleSubmitRatings}
-        disabled={isSubmittingRatings}
-        className="bg-[#142d95] text-white px-6 py-3 rounded text-base font-semibold hover:bg-[#101761] transition"
-      >
-        {isSubmittingRatings ? 'Submitting...' : 'Submit My Ratings'}
-      </button>
+    <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
+      <div className="text-center mt-6 mb-8">
+        <p className="mb-4 text-lg text-gray-700">
+          If you have changed your mind about any ratings, you can go to the top of the page to 'x' those proposals. Then, you can re-rate those items.
+        </p>
+        <p className="mb-4 text-lg text-gray-700">
+          When you're ready, click <strong>Submit My Ratings</strong>.
+        </p>
+        <button
+          onClick={() => {
+            setRatingsSubmitted(true);
+            setReadyToSubmit(true);
+            setReflectionStep(2);
+          }}
+          className="bg-[#142d95] text-white px-6 py-3 rounded text-base font-semibold hover:bg-[#101761] transition"
+        >
+          Submit My Ratings
+        </button>
+      </div>
     </div>
   </div>
-</div>
-
 )}
 
 {(reflectionStep === 2 || reflectionStep === 3) && (
   <div
     ref={reflectionStep2Ref}
     className="rounded-lg shadow-lg p-1 mb-6"
-    style={{ background: 'linear-gradient(135deg, #e0f2f1, #e8f5e9, #ffffff)' }}
+    style={{
+      background: 'linear-gradient(135deg, #e0f2f1, #e8f5e9, #ffffff)',
+    }}
   >
     <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
       {reflectionStep === 2 && (
         <div className="space-y-5 text-base sm:text-lg text-gray-800">
-          <div className="rounded text-base sm:text-lg text-gray-800">
-            Our goal is to soon tell every lawmaker: <em>These reforms embody the aspirations of the American people. Make this package a priority – or we'll elect someone else.</em>
-          </div>
-          <p className="text-base sm:text-lg mb-4">
-            So, which would you prefer: Telling members of Congress to work on this Grand Bargain – or leave your future in their hands?
+          <p className="text-lg sm:text-xl font-semibold text-gray-900">
+            The reforms that you rated positively have been around for years. Congress has enacted none of them.
           </p>
+
+          <div className="text-base sm:text-lg space-y-3 leading-relaxed">
+            <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
+            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
+          </div>
+          <p className="text-base sm:text-lg">
+            So far, <strong>77%</strong> of voters using this WebApp have preferred this package over the country’s current direction.
+          </p>
+
+          <p className="text-base sm:text-lg">Do you expect this Congress to offer a better deal?</p>
+
+          <div className="rounded text-base sm:text-lg text-gray-800">
+            If not, and you join us, we can soon tell lawmakers from both parties: <em>Make this package a priority – or we'll elect someone else.</em>
+          </div>
+          <p className="text-base sm:text-lg">So, which would you prefer: Telling members of Congress to work on this Grand Bargain – or leave your future in their hands?</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-left">
             <button
@@ -724,7 +636,31 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
                   : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
               } transition`}
               disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
-              onClick={() => handleChooseQ2(true)}
+              onClick={async () => {
+                if (reflectionAnswers.q2 !== '' || isSubmittingQ2) return;
+                setIsSubmittingQ2(true);
+                try {
+                  await airtableBase('submissions').create([
+                    {
+                      fields: {
+                        session_id: sessionId,
+                        assignment: JSON.stringify(assignmentArray),
+                        reflection_q2: "true",
+                        reflection_q3: '',
+                        submitted_at: new Date().toISOString(),
+                        version: APP_VERSION,
+                      },
+                    },
+                  ]);
+                  setReflectionAnswers(prev => ({ ...prev, q2: true }));
+                  setReflectionStep(0);
+                  setShowPackagePopup(true);
+                } catch (err) {
+                  console.error('Error submitting reflection to Airtable:', err);
+                } finally {
+                  setIsSubmittingQ2(false);
+                }
+              }}
             >
               {isSubmittingQ2 ? 'Submitting...' : 'Grand Bargain'}
             </button>
@@ -736,7 +672,30 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
                   : 'bg-gray-300 hover:bg-[#142d95] hover:text-white'
               } transition`}
               disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
-              onClick={() => handleChooseQ2(false)}
+              onClick={async () => {
+                if (reflectionAnswers.q2 !== '' || isSubmittingQ2) return;
+                setIsSubmittingQ2(true);
+                try {
+                  await airtableBase('submissions').create([
+                    {
+                      fields: {
+                        session_id: sessionId,
+                        assignment: JSON.stringify(assignmentArray),
+                        reflection_q2: "false",
+                        reflection_q3: '',
+                        submitted_at: new Date().toISOString(),
+                        version: APP_VERSION,
+                      },
+                    },
+                  ]);
+                  setReflectionAnswers(prev => ({ ...prev, q2: false }));
+                  setReflectionStep(3);
+                } catch (err) {
+                  console.error('Error submitting reflection_q2: false to Airtable:', err);
+                } finally {
+                  setIsSubmittingQ2(false);
+                }
+              }}
             >
               {isSubmittingQ2 ? 'Submitting...' : 'Whatever Congress Decides'}
             </button>
@@ -746,29 +705,70 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
 
       {reflectionStep === 3 && (
         <div>
-          <p className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-            The reforms that you rated positively have been around for years. Congress has enacted none of them.
-          </p>
-          <div className="text-base sm:text-lg space-y-3 mb-7 leading-relaxed">
-            <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
-            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support. To that end, we keep testing variations.</p>
-            <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
-            <p>We would welcome your ideas — for changes or additions — that might get more of the American people on board. Please type your suggestions in here.</p>
-          </div>
-
+          <p className="text-xl sm:text-2xl font-semibold text-gray-900 mb-2">
+  If you want Congress to decide our future
+</p>
+<p className="mb-4 text-base sm:text-lg text-gray-800">
+  What changes would get you to support the total package – that you think more than 77% of the country would accept?
+</p>
           <textarea
-            className="w-full border border-gray-300 rounded p-2 text-sm mb-4 space-y-3"
+            className="w-full border border-gray-300 rounded p-2 text-sm mb-4"
             rows={4}
             placeholder="Your answer..."
             value={reflectionAnswers.q3}
-            onChange={e => setReflectionAnswers(prev => ({ ...prev, q3: e.target.value }))}
+            onChange={e =>
+              setReflectionAnswers(prev => ({ ...prev, q3: e.target.value }))
+            }
           />
           <button
-            className="bg-[#142d95] text-white px-4 py-2 rounded text-sm mb-4"
-            onClick={handleSubmitQ3}
-            disabled={isSubmittingQ3}
+            className="bg-[#142d95] text-white px-4 py-2 rounded text-sm"
+            onClick={async () => {
+              if (isSubmittingQ3) return;
+              setIsSubmittingQ3(true);
+              const assignmentArray = Object.entries(assignments).map(([id, bucket]) => {
+                const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
+                const category = Object.entries(proposalsData).find(([cat, list]) =>
+                  list.some(p => p.id.toString() === id)
+                )?.[0];
+                return {
+                  proposal_id: parseInt(id),
+                  title: proposal?.title || '',
+                  category,
+                  bucket,
+                  fname: formData.fname,
+                  lname: formData.lname,
+                  email: formData.email,
+                  submitted_at: new Date().toISOString()
+                };
+              });
+
+              try {
+                const findResult = await airtableBase('submissions').select({
+                  filterByFormula: `{session_id} = "${sessionId}"`,
+                  maxRecords: 1
+                }).firstPage();
+
+                if (findResult.length > 0) {
+                  const recordId = findResult[0].id;
+                  await airtableBase('submissions').update(recordId, {
+                    reflection_q3: reflectionAnswers.q3.toString(),
+                    assignment: JSON.stringify(assignmentArray),
+                    submitted_at: new Date().toISOString(),
+                  });
+                } else {
+                  console.error('No existing submission found to update for session_id:', sessionId);
+                }
+
+                setReflectionStep(0);
+                setShowDirectionPopup(true);
+              } catch (err) {
+                console.error('Error submitting Q3 reflection to Airtable:', err);
+              } finally {
+                setIsSubmittingQ3(false);
+              }
+            }}
           >
-            {isSubmittingQ3 ? 'Submitting...' : 'Continue'}
+            {isSubmittingQ3 ? 'Submitting...' : 'Submit'}
           </button>
         </div>
       )}
@@ -1166,7 +1166,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
               {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
               {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
               {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year: The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> The Value Added Tax would add $200 billion in annual revenue<br /> Carbon pricing would also yield $200 billion in revenue<br /><br />Also, to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
+              {category === 'Federal Spending & Debt' && (<>To curb the debt in ways that will improve each American's future, in this Grand Bargain: <br /><br />1) The Economic Mobility, Education, Healthcare and Energy proposals would boost productivity and growth.<br /> 2) The Healthcare proposals would reduce costs and increase productivity.<br /> 3) The Tax and Energy proposals would raise revenue and increase efficiency.<br /><br /> <strong>The result: The debt - as a percentage of the overall economy - would steadily decline.</strong> </>)}
               <div className="flex flex-wrap gap-2 mt-4">
                 {buckets.map(bucket => (
                   <button

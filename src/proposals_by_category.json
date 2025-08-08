@@ -1,0 +1,159 @@
+{
+  "Economic Mobility and Growth": [
+    {
+      "id": 1,
+      "title": "Provide community colleges, employers, unions and other programs with incentives to train workers for higher paying jobs, particularly in fast-growing industries"
+    },
+    {
+      "id": 2,
+      "title": "Reduce regulations that restrict construction of new affordable housing and infrastructure"
+    },
+    {
+      "id": 3,
+      "title": "Support rural communities and low-income urban areas with education, training, broadband access, and investment incentives to promote entrepreneurship and job creation"
+    },
+    {
+      "id": 4,
+      "title": "Increase child-care subsidies to low-income families so parents can choose whether to work or stay home with young children"
+    },
+    {
+      "id": 5,
+      "title": "Expand the earned income tax credit and other earning subsidies to low wage workers"
+    },
+    {
+      "id": 6,
+      "title": "Support workers\u2019 rights to form, join and contribute to unions, and their rights not to"
+    },
+    {
+      "id": 7,
+      "title": "Double federal spending on basic research to $200 billion a year, and improve the pipeline from publicly funded research to commercialization"
+    }
+  ],
+  "Energy Policy": [
+    {
+      "id": 26,
+      "title": "Repeal energy subsidies, regulations and legislation whose costs exceed the benefits"
+    },
+    {
+      "id": 27,
+      "title": "Place a price on carbon emissions of at least $51 per ton, and cut income taxes accordingly on low-income and rural families"
+    },
+    {
+      "id": 28,
+      "title": "To level the playing field with countries that do not put a price on carbon emissions, create a $51 per ton tariff on their products"
+    },
+    {
+      "id": 30,
+      "title": "To reduce methane emissions, support reuse technologies and hold current and former owners of abandoned fossil fuel wells liable for capping those wells"
+    },
+    {
+      "id": 32,
+      "title": "To send energy across the country efficiently, increase Federal agencies’ authority to plan and issue permits for transmission lines and other energy infrastructure across state lines"
+    }
+    
+  ],
+  "Federal Spending & Debt": [
+    {
+  "id": 33,
+  "title": "Federal Spending & Debt Overall Proposal"
+}
+  ],
+  "Healthcare": [
+    {
+      "id": 1724,
+      "title": "Expand community support systems for overall health, especially in distressed and rural areas, where private providers lack incentives to provide services."
+    },
+    {
+      "id": 18,
+      "title": "Coordinate public education for healthier lifestyles and prevention, especially about obesity and nutrition, and increase funding for good nutrition through existing Federal programs"
+    },
+    {
+      "id": 19,
+      "title": "Require each Medicare and Medicaid plan to - measurably - reduce costs and improve their patients’ health outcomes, and stop paying providers for each test and procedure they perform"
+    },
+    {
+      "id": 20,
+      "title": "Expand support for public and private Accountable Care Organizations (e.g. Kaiser Permanente), which provide services to patients based on which yield better health outcomes at lower cost"
+    },
+    {
+      "id": 22,
+      "title": "Expand free meals to low-income schools, including in the summer, to ensure that low-income children have access to nutritious foods"
+    },
+    {
+      "id": 23,
+      "title": "Prevent any business from acquiring a monopoly of health care providers in any region"
+    },
+    {
+      "id": 25,
+      "title": "Expand the use of federal price negotiations to manage the cost of pharmaceuticals and prescription drugs"
+    }
+  ],
+  "K-12 Education": [
+    {
+      "id": 8,
+      "title": "Revise educational goals and standards to include both academic and life skills, such as teamwork and resilience"
+    },
+    {
+      "id": 9,
+      "title": "Reform teacher training and professional development to boost teachers\u2019 performance"
+    },
+    {
+      "id": 10,
+      "title": "Increase teacher and school accountability for students\u2019 performance"
+    },
+    {
+      "id": 11,
+      "title": "Significantly increase pay for more effective teachers"
+    },
+    {
+      "id": 12,
+      "title": "Develop programs to increase lower income parents\u2019 support for their children\u2019s learning"
+    },
+    {
+      "id": 13,
+      "title": "Expand family choice among public and charter schools"
+    },
+    {
+      "id": 14,
+      "title": "Increase per-student support for under-resourced schools"
+    },
+    {
+      "id": 15,
+      "title": "Provide adequate funding for school facilities and universal broadband"
+    },
+    {
+      "id": 16,
+      "title": "Help state and local education agencies build up their evaluation and research capabilities"
+    }
+  ],
+  "Taxes": [
+    {
+      "id": 39,
+      "title": "Sharply reduce deductions, exclusions and credits that mostly help high-income families"
+    },
+    {
+      "id": 41,
+      "title": "To reduce evasion and promote exports, tax the value added by each producer in the supply chain — at the rate of 5% — and rebate this value-added tax (VAT) to low-income consumers"
+    },
+    {
+      "id": 47,
+      "title": "Make Social Security more cost-effective by raising benefits for low earners; reducing growth of benefits for high earners; and raising the retirement age, but only for those who can work."
+    },
+    {
+      "id": 43,
+      "title": "Allow businesses to deduct all expenses, including capital investments, but excluding interest, in the year paid"
+    },
+    {
+      "id": 44,
+      "title": "End taxation distinctions between corporate and non-corporate businesses"
+    },
+    {
+      "id": 45,
+      "title": "Tax the gains on capital assets when they are inherited, ending the ability to avoid such taxes"
+    },
+    {
+      "id": 46,
+      "title": "Lower the size of estates exempt from tax (currently $27 million per couple)"
+    }
+  ]
+}

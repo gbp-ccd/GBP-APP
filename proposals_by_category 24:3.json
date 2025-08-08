@@ -1,0 +1,202 @@
+{
+  "Economic Growth & Mobility": [
+    {
+      "id": 1,
+      "title": "Reduce economically unsound regulations that restrict construction of new affordable housing and infrastructure"
+    },
+    {
+      "id": 2,
+      "title": "Expand the earned income tax credit and other earning subsidies to low wage workers"
+    },
+    {
+      "id": 3,
+      "title": "Increase child-care subsidies to low-income families to enable parents to choose whether to work or to stay at home with very young children"
+    },
+    {
+      "id": 4,
+      "title": "Incentivize community colleges, other skills training programs, employers and unions to work together to produce workers with the skills to obtain higher paying jobs, particularly in fast-growing industries"
+    },
+    {
+      "id": 5,
+      "title": "Support workers\u2019 rights to form, join and contribute to unions, and their rights not to."
+    },
+    {
+      "id": 6,
+      "title": "Double federal spending on basic research to $200 billion a year, and improve the pipeline from publicly funded research to commercialization"
+    },
+    {
+      "id": 7,
+      "title": "Support rural communities and low-income urban areas with education, training, broadband access, and investment incentives to promote entrepreneurship and job creation."
+    }
+  ],
+  "Energy Policy": [
+    {
+      "id": 27,
+      "title": "Create a carbon price of $51/ton (the federal government\u2019s estimate of each ton\u2019s social cost), phased in over three years, yielding almost $2 trillion in the next decade. To offset the impact on low-income families and rural communities, adjust income taxes accordingly (including fully refundable tax credits)."
+    },
+    {
+      "id": 28,
+      "title": "Create an equivalent carbon border tariff, to be imposed on imports from countries that do not price carbon."
+    },
+    {
+      "id": 29,
+      "title": "Hold current and former owners of abandoned fossil fuel wells liable for capping those wells to reduce methane emissions, similar to requirements for cleanup of hazardous waste sites."
+    },
+    {
+      "id": 30,
+      "title": "Support methane capture and reuse technologies."
+    },
+    {
+      "id": 31,
+      "title": "To ensure efficient transmission of energy from renewable sources to areas that need it, give Federal government agencies increased authority to plan, site and permit transmission lines and other energy infrastructure that crosses state lines."
+    },
+    {
+      "id": 32,
+      "title": "Repeal demonstrably ineffective or inefficient energy subsidies and regulations, such as the renewable fuel standard for ethanol."
+    }
+  ],
+  "Federal Spending & Debt": [
+    {
+      "id": 33,
+      "title": "Increase spending that will spark growth by focusing more on younger generations, education and research, reducing poverty, and increasing upward mobility (see economic mobility and education proposals above)."
+    },
+    {
+      "id": 34,
+      "title": "Increase taxes, primarily on those who can most afford it (see tax proposals below)."
+    },
+    {
+      "id": 35,
+      "title": "Slow the real growth of Social Security benefits scheduled for medium and high earners retiring in the future, while increasing benefits to low earners, so those who worked all their lives receive retirement income above the poverty line."
+    },
+    {
+      "id": 36,
+      "title": "Raise the retirement age for those who can work but not for those who cannot."
+    },
+    {
+      "id": 37,
+      "title": "Contain the cost of Medicare (see the section on health care above)."
+    },
+    {
+      "id": 38,
+      "title": "Require new Federal spending be offset with new revenue or cuts elsewhere, except in emergencies."
+    }
+  ],
+  "Healthcare": [
+    {
+      "id": 18,
+      "title": "Promote integrated approaches to overall health, especially in distressed areas, and support systems for lower-income populations to reduce health risks (see also economic policies for lower income workers above)."
+    },
+    {
+      "id": 19,
+      "title": "Coordinate public education for healthier lifestyles and prevention, especially about obesity and nutrition, and increase funding for good nutrition through existing Federal programs."
+    },
+    {
+      "id": 20,
+      "title": "Expand free meals to low-income schools, including in the summer, to ensure that low-income children have access to nutritious foods."
+    },
+    {
+      "id": 21,
+      "title": "Use Federal and state regulatory authority to prevent excessive concentration of ownership of health care providers at local or regional level."
+    },
+    {
+      "id": 22,
+      "title": "Expand Federal and state support for health care provision in rural areas, where private health providers do not have adequate incentives to provide services."
+    },
+    {
+      "id": 23,
+      "title": "Continue to refine Medicare Advantage regulations, so that Medicare Advantage produces consistent cost savings over traditional Medicare for the government and participating seniors, while meeting standards of care."
+    },
+    {
+      "id": 24,
+      "title": "Continue to develop and support Accountable Care Organizations."
+    },
+    {
+      "id": 25,
+      "title": "Expand the use of Medicare drug price negotiations to manage the cost of pharmaceuticals."
+    },
+    {
+      "id": 26,
+      "title": "Significantly improve measurement of each Medicare plan\u2019s health outcomes, so those failing to provide quality, cost-effective care are replaced by those meeting higher standards."
+    }
+  ],
+  "K-12 Education": [
+    {
+      "id": 8,
+      "title": "Revise educational goals and measures to include both core academic skills and cross-cutting skills and traits such as teamwork, and resilience"
+    },
+    {
+      "id": 9,
+      "title": "Revise teaching standards and accountability systems to measure the full set of skills and traits students need to develop"
+    },
+    {
+      "id": 10,
+      "title": "Ensure that teacher training and professional development produce high performing teachers"
+    },
+    {
+      "id": 11,
+      "title": "Significantly increase pay for more effective teachers"
+    },
+    {
+      "id": 12,
+      "title": "Increase teacher and school accountability for students\u2019 performance"
+    },
+    {
+      "id": 13,
+      "title": "Develop programs to increase lower income parents\u2019 support for their children\u2019s learning"
+    },
+    {
+      "id": 14,
+      "title": "Expand family choice among public schools, including charter schools"
+    },
+    {
+      "id": 15,
+      "title": "Ensure learning opportunities for all students through increased per-student support for under-resourced schools"
+    },
+    {
+      "id": 16,
+      "title": "Provide adequate capital funding for school facilities and universal broadband access."
+    },
+    {
+      "id": 17,
+      "title": "Build up the evaluation and research capacities of state and local education agencies"
+    }
+  ],
+  "Taxes": [
+    {
+      "id": 39,
+      "title": "Sharply reduce deductions, exclusions and credits that mostly benefit high-income families"
+    },
+    {
+      "id": 40,
+      "title": "Lower income taxes on low-income families."
+    },
+    {
+      "id": 41,
+      "title": "Introduce a Federal value added tax (VAT) and incentivize states to replace their sales taxes with VATs, offsetting both costs to low income consumers through cash refunds."
+    },
+    {
+      "id": 42,
+      "title": "Allow businesses to deduct all expenses in the year made"
+    },
+    {
+      "id": 43,
+      "title": "Eliminate business deductions for interest"
+    },
+    {
+      "id": 44,
+      "title": "Eliminate taxation distinctions between corporate and non-corporate businesses."
+    },
+    {
+      "id": 45,
+      "title": "Tax the value of inheritances at the time they are transferred, eliminating the stepped-up basis that leaves untaxed all the gains since first purchased."
+    },
+    {
+      "id": 46,
+      "title": "Lower the size of estates exempt from tax (currently $27 million per couple)"
+    },
+    {
+      "id": 47,
+      "title": "Tax inheritances based on income of the beneficiary not the deceased"
+    }
+  ]
+}

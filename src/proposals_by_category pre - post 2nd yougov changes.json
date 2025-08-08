@@ -1,0 +1,163 @@
+{
+  "Economic Mobility and Growth": [
+    {
+      "id": 1,
+      "title": "Incentivize community colleges, employers, unions and other programs to train workers for higher paying jobs, particularly in fast-growing industries"
+    },
+    {
+      "id": 2,
+      "title": "Reduce regulations that restrict construction of new affordable housing and infrastructure"
+    },
+    {
+      "id": 3,
+      "title": "Support rural communities and low-income urban areas with education, training, broadband access, and investment incentives to promote entrepreneurship and job creation"
+    },
+    {
+      "id": 4,
+      "title": "Increase child-care subsidies to low-income families so parents can choose whether to work or stay home with young children"
+    },
+    {
+      "id": 5,
+      "title": "Expand the earned income tax credit and other earning subsidies to low wage workers"
+    },
+    {
+      "id": 6,
+      "title": "Support workers\u2019 rights to form, join and contribute to unions, and their rights not to"
+    },
+    {
+      "id": 7,
+      "title": "Double federal spending on basic research to $200 billion a year, and improve the pipeline from publicly funded research to commercialization"
+    }
+  ],
+  "Energy Policy": [
+    {
+      "id": 26,
+      "title": "Repeal energy subsidies, regulations and legislation whose costs exceed the benefits"
+    },
+    {
+      "id": 27,
+      "title": "Place a price on carbon emissions of at least $51 per ton, and cut income taxes accordingly on low-income and rural families"
+    },
+    {
+      "id": 28,
+      "title": "To level the playing field with countries that do not put a price on carbon emissions, create a $51 per ton tariff on their products"
+    },
+    {
+      "id": 30,
+      "title": "To reduce methane emissions, support reuse technologies and hold current and former owners of abandoned fossil fuel wells liable for capping those wells"
+    },
+    {
+      "id": 32,
+      "title": "To efficiently transmit energy nationwide, give Federal agencies increased authority to plan, site and permit transmission lines and other energy infrastructure across state lines"
+    }
+    
+  ],
+  "Federal Spending & Debt": [
+    {
+      "id": 33,
+      "title": "The sections on Energy and Taxes would raise revenue. The section on Healthcare would reduce costs. The sections on Mobility, Healthcare, Education and Energy would increase productivity, boosting GDP. The debt-to-GDP ratio would therefore start declining. Additional proposals to curb the debt might not be necessary."
+    }
+  ],
+  "Healthcare": [
+    {
+      "id": 17,
+      "title": "Promote integrated support systems for overall health, especially in distressed areas"
+    },
+    {
+      "id": 18,
+      "title": "Coordinate public education for healthier lifestyles and prevention, especially about obesity and nutrition, and increase funding for good nutrition through existing Federal programs"
+    },
+    {
+      "id": 19,
+      "title": "Require each Medicare and Medicaid plan to - measurably - reduce costs and improve their patients’ health outcomes, and stop paying providers for each test and procedure they perform"
+    },
+    {
+      "id": 20,
+      "title": "Expand support for public and private Accountable Care Organizations, which provide services to patients based on which yield better health outcomes at lower cost (e.g. Kaiser Permanente)"
+    },
+    {
+      "id": 22,
+      "title": "Expand free meals to low-income schools, including in the summer, to ensure that low-income children have access to nutritious foods"
+    },
+    {
+      "id": 23,
+      "title": "Prevent any business from acquiring a monopoly of health care providers in any region"
+    },
+    {
+      "id": 24,
+      "title": "Expand health care support in rural areas, where private providers lack incentives to provide services"
+    },
+    {
+      "id": 25,
+      "title": "Expand the use of federal price negotiations to manage the cost of pharmaceuticals"
+    }
+  ],
+  "K-12 Education": [
+    {
+      "id": 8,
+      "title": "Revise educational goals and standards to include both academic and life skills, such as teamwork and resilience"
+    },
+    {
+      "id": 9,
+      "title": "Reform teacher training and professional development to boost teachers\u2019 performance"
+    },
+    {
+      "id": 10,
+      "title": "Increase teacher and school accountability for students\u2019 performance"
+    },
+    {
+      "id": 11,
+      "title": "Significantly increase pay for more effective teachers"
+    },
+    {
+      "id": 12,
+      "title": "Develop programs to increase lower income parents\u2019 support for their children\u2019s learning"
+    },
+    {
+      "id": 13,
+      "title": "Expand family choice among public and charter schools"
+    },
+    {
+      "id": 14,
+      "title": "Increase per-student support for under-resourced schools"
+    },
+    {
+      "id": 15,
+      "title": "Provide adequate funding for school facilities and universal broadband"
+    },
+    {
+      "id": 16,
+      "title": "Help state and local education agencies build up their evaluation and research capabilities"
+    }
+  ],
+  "Taxes": [
+    {
+      "id": 39,
+      "title": "Sharply reduce deductions, exclusions and credits that mostly benefit high-income families"
+    },
+    {
+      "id": 41,
+      "title": "To reduce evasion and promote exports, tax the value added by each producer in the supply chain, and rebate this value-added tax (VAT) to low-income consumers"
+    },
+    {
+      "id": 47,
+      "title": "Make Social Security more cost effective by: reducing growth of benefits for high earners; raising benefits for low earners; and raising the retirement age, but only for those who can work"
+    },
+    {
+      "id": 43,
+      "title": "Allow businesses to deduct all expenses, including capital investments, but excluding interest, in the year paid"
+    },
+    {
+      "id": 44,
+      "title": "Eliminate taxation distinctions between corporate and non-corporate businesses"
+    },
+    {
+      "id": 45,
+      "title": "Tax the gains on capital assets at the time they are inherited, eliminating the stepped-up basis that leaves untaxed all the gains since first purchased\u00a0"
+    },
+    {
+      "id": 46,
+      "title": "Lower the size of estates exempt from tax (currently $27 million per couple)"
+    }
+  ]
+}
