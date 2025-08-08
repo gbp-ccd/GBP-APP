@@ -99,7 +99,7 @@ function App() {
   const packageRef = React.useRef(null);
 const directionRef = React.useRef(null);
 const [isSubmittingQ2, setIsSubmittingQ2] = useState(false);
-const [isSubmittingFinalForm, setIsSubmittingFinalForm] = useState(false);
+const [setIsSubmittingFinalForm] = useState(false);
 const [isSubmittingQ3, setIsSubmittingQ3] = useState(false);
 const categoryRefs = useRef({});
 const reflectionStep2Ref = useRef(null);
@@ -110,7 +110,6 @@ const [readyToSubmit, setReadyToSubmit] = useState(false);
 const [ratingsSubmitted, setRatingsSubmitted] = useState(false);
 const [submitPromptShown, setSubmitPromptShown] = useState(false);
 const [isSubmittingRatings, setIsSubmittingRatings] = useState(false);
-const showForm = totalAssigned === totalProposals && !submitted && reflectionStep !== 0;
 
 const scrollToFirstCategory = () => {
   setExpandedCategories(prev => ({ ...prev, 'Economic Mobility and Growth': true }));
@@ -134,14 +133,6 @@ useEffect(() => {
     directionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }, [showDirectionPopup]);
-  const [aspirationAnswers, setAspirationAnswers] = useState({
-    economic: { important: null, progress: null },
-    education: { important: null, progress: null },
-    healthcare: { important: null, progress: null },
-    debt: { important: null, progress: null },
-    energy: { important: null, progress: null },
-    taxes: { important: null, progress: null },
-  });
   const [reflectionAnswers, setReflectionAnswers] = useState({
   q2: '',
   q3: '',
@@ -228,74 +219,14 @@ useEffect(() => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const reflection_q3 = null;  // reflection_q3 will be null initially
+
 
   // Use the pre-generated session_id from the state
   const session_id = sessionId;  // Use the pre-generated session_id from the state
 
   console.log('Using session_id for initial submission:', session_id);  // Debug log
 
-  const assignmentArray = Object.entries(assignments).map(([id, bucket]) => {
-    const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
-    const category = Object.entries(proposalsData).find(([cat, list]) =>
-      list.some(p => p.id.toString() === id)
-    )?.[0];
-
-    return {
-      proposal_id: parseInt(id),
-      title: proposal?.title || '',
-      category,
-      bucket,
-      fname: null,  // Set fname to null here (since it's not available yet)
-      lname: null,  // Set lname to null here (since it's not available yet)
-      email: null,  // Set email to null here (since it's not available yet)
-      zip: null,  // Set email to null here (since it's not available yet)
-      submitted_at: new Date().toISOString(),
-      // reflection_q1 removed
-      reflection_q2: reflectionAnswers.q2.toString(),
-      reflection_q3,  // reflection_q3 is null
-      session_id  // Include session_id here
-    };
-  });
-
-  const payload = {
-    session_id,  // Ensure session_id is included here
-    fname: null,  // Empty fname
-    lname: null,  // Empty lname
-    email: null,  // Empty email
-    zip: null,  // Empty email
-    assignment: JSON.stringify(assignmentArray),
-    // reflection_q1 removed
-    reflection_q2: reflectionAnswers.q2.toString(),
-    reflection_q3,  // reflection_q3 is null
-    reflection_q4: reflectionAnswers.q4.toString(),
-    submitted_at: new Date().toISOString(),
-  };
-
-const submitInitialReflection = async () => {
-  console.log('Session ID:', session_id);
-  console.log('Assignment Array:', JSON.stringify(assignmentArray, null, 2));
-  console.log('Payload being sent to Airtable:', JSON.stringify(payload, null, 2));
-
-  try {
-    await createRecord('submissions', {
-      session_id,
-      fname: null,
-      lname: null,
-      email: null,
-      assignment: JSON.stringify(assignmentArray),
-      reflection_q2: reflectionAnswers.q2.toString(),
-      reflection_q3,
-      submitted_at: new Date().toISOString(),
-      reflection_q4: reflectionAnswers.q4.toString(),
-      version: APP_VERSION,
-    });
-    console.log('Initial reflection submitted to Airtable.');
-  } catch (err) {
-    console.error('Error submitting reflection to Airtable:', err);
-  }
-};
-  
+ 
   // Call it only when needed, like this:
   // DO NOT auto-submit on mount. Only submit from a controlled event.
 
