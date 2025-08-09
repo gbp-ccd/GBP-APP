@@ -656,11 +656,11 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
           <div className="rounded text-base sm:text-lg text-gray-800">
             <strong>Our goal is to empower the American people, so that we can tell lawmakers from both parties: </strong>
           <p className="text-base sm:text-lg mb-4">
-             <em>These reforms will advance the aspirations we all share. Make this package a priority – or we'll elect someone else.</em>
+             <em>These reforms will advance the aspirations we all share. Make this package a priority – or we'll elect someone who will.</em>
           </p>
           </div>
           <p className="text-base sm:text-lg mb-4">
-            So, which would you prefer: Telling members of Congress to work on this Grand Bargain – or leave your future in their hands?
+            So, which would you prefer: Telling members of Congress to work on this evolving Grand Bargain – or leave your future in their hands?
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-left">
