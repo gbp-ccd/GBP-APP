@@ -430,7 +430,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
   >
     <div className="bg-white rounded-lg p-4 space-y-4">
       <p><strong>We nearly all share these aspirations,</strong> yet our political system puts them out of reach.</p> 
-      <p>Each party enacts laws to satisfy its strongest supporters on a few issues, while letting our overall problems grow worse.</p>
+      <p>Each party enacts laws to satisfy its strongest supporters on some issues, while letting our overall problems grow worse.</p>
       <div className="text-left mt-4">
         <button className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4" onClick={() => setIntroStep(3)}>
           Next
@@ -654,9 +654,9 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
       {reflectionStep === 2 && (
         <div className="space-y-5 text-base sm:text-lg text-gray-800">
           <div className="rounded text-base sm:text-lg text-gray-800">
-            <strong>Our goal is to empower the American people, so that we can tell lawmakers from both parties: </strong>
+            <strong>Our goal is to empower you, so that all of us together can tell lawmakers from both parties: </strong>
           <p className="text-base sm:text-lg mb-4">
-             <em>These reforms will advance the aspirations we all share. Make this package a priority – or we'll elect someone who will.</em>
+             <em>These reforms will advance the aspirations Americans all share. Make this package a priority – or we'll elect someone who will.</em>
           </p>
           </div>
           <p className="text-base sm:text-lg mb-4">
@@ -701,7 +701,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
             <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
             <p>To that end, we keep testing variations.</p>
             <p>In July, 77% of voters using this App saw the benefits of this package as valuable enough to accept the drawbacks. They chose this Grand Bargain over the country’s current direction.</p>
-            <p>We would welcome your ideas — for changes or additions — that might draw in more of the American people.</p>
+            <p>We would welcome your ideas — for changes or additions — that might draw in even more of the American people.</p>
           </div>
 
           <textarea
@@ -1114,7 +1114,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
               {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
               {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
               {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year: The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> The Value Added Tax would add $200 billion in annual revenue<br /> Carbon pricing would also yield $200 billion in revenue<br /><br />Also, to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
+              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> The Value Added Tax would add $200 billion in annual revenue<br /> Carbon pricing would also yield $200 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
               <div className="flex flex-wrap gap-2 mt-4">
                 {buckets.map(bucket => (
                   <button
