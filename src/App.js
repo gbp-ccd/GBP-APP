@@ -660,7 +660,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
           </p>
           </div>
           <p className="text-base sm:text-lg mb-4">
-            So, which would you prefer: Telling members of Congress to work on this evolving Grand Bargain – or leave your future in their hands?
+            So, which would you prefer: Telling members of Congress to work on this evolving Grand Bargain – or leave it up to them to decide your future?
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-left">
@@ -694,14 +694,13 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
       {reflectionStep === 3 && (
         <div>
           <p className="text-lg sm:text-xl font-semibold text-gray-900 mb-4">
-            The reforms you rated positively have been around for years. Congress has enacted none of them.
+            The reforms that you rated positively have been around for years. Congress has enacted none of them.
           </p>
           <div className="text-base sm:text-lg space-y-3 mb-7 leading-relaxed">
-            <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of seeking genuine solutions.</p>
-            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
-            <p>To that end, we keep testing variations.</p>
-            <p>In July, 77% of voters using this App saw the benefits of this package as valuable enough to accept the drawbacks. They chose this Grand Bargain over the country’s current direction.</p>
-            <p>We would welcome your ideas — for changes or additions — that might draw in even more of the American people.</p>
+            <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
+            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support. To that end, we keep testing variations.</p>
+            <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
+            <p>We would welcome your ideas — for changes or additions — that might get more of the American people on board. Please type your suggestions in here.</p>
           </div>
 
           <textarea
@@ -1114,7 +1113,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
               {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
               {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
               {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> The Value Added Tax would add $200 billion in annual revenue<br /> Carbon pricing would also yield $200 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
+              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> A low consumption tax (VAT), and market-based carbon pricing, would yield $400 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
               <div className="flex flex-wrap gap-2 mt-4">
                 {buckets.map(bucket => (
                   <button
