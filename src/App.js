@@ -80,7 +80,7 @@ We thereby squander at least $2.3 trillion each year - which boosts the national
 
 'Taxes': `THE PROBLEM: Politicians from both parties routinely provide their strongest supporters with tax breaks, which boost the national debt and reward wasteful investments.`,
 
-   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036. This would send interest rates soaring, hobbling our economy. Yet both political parties have let the problem grow steadily worse for decades.`
+   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036, which would send interest rates soaring, hobbling our economy. Yet both political parties have let the problem grow steadily worse for decades.`
 
 };
 
@@ -474,13 +474,14 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
     }}
   >
     <div className="bg-white rounded-lg p-4 space-y-4">
-      <p><strong>77% of Americans in a recent YouGov survey chose this package of 35 reforms over the country’s current direction. </strong></p>
-      <p>To see how this Grand Bargain could benefit you, the next screens will ask you to:</p>
+      <p><strong>In a recent poll, 77% of Americans using this WebApp preferred this package of reforms over the country’s current direction.</strong></p>
+      <p>That 77% far exceeds approval ratings for both political parties combined.</p>
+      <p>To see for yourself how this Grand Bargain would be better for you than the country’s current direction, the next screens will ask you to:</p>
       <div className="leading-snug mt-[-0.5rem] ">
         <p className="m-0">1. Rate each reform</p>
-        <p className="m-0">2. Evaluate the total package</p>
-        <p className="m-0">3. If you have doubts, tell us why</p>
-        <p className="m-0">4. If you approve, we invite you to learn more about us.</p>
+        <p className="m-0">2. Suggest additions or changes</p>
+        <p className="m-0">3. Evaluate the package</p>
+        <p className="m-0">4. If you're interested, receive further information</p>
       </div>
       <div className="text-left">
         <button className="bg-[#142d95] text-white px-6 py-2 rounded text-sm mt-4" onClick={() => setShowIntroModal(false)}>
@@ -562,6 +563,8 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
     </div>
   </div>
 )}
+
+{!(readyToSubmit && reflectionStep === 2) && (
       <div className="flex flex-col lg:flex-row gap-4 mb-6">
   {buckets.map(bucket => (
     <div
@@ -615,6 +618,9 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
     </div>
   ))}
 </div>
+)}
+
+
 {(() => {
   if (totalAssigned === totalProposals && !readyToSubmit && !submitted) {
     if (!submitPromptShown) setSubmitPromptShown(true);
@@ -1114,7 +1120,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
               {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
               {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
               {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. The proposals in other sections would do so: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> A low consumption tax (VAT), and market-based carbon pricing, would yield $400 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would add $500 billion in annual revenue. <br /></>)}
+              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. The proposals in other sections would do the job: <br /><br /> The Healthcare reforms would boost productivity, yielding $200 billion in annual savings<br />Ending wasteful energy subsidies would save $200 billion yearly<br /> A low consumption tax (VAT), and market-based carbon pricing, would yield $400 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would provide $500 billion a year. <br /></>)}
               <div className="flex flex-wrap gap-2 mt-4">
                 {buckets.map(bucket => (
                   <button
