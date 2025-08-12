@@ -698,7 +698,8 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
           </p>
           <div className="text-base sm:text-lg space-y-3 mb-7 leading-relaxed">
             <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
-            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support. To that end, we keep testing variations.</p>
+            <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
+            <p>To that end, we keep testing variations.</p>
             <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
             <p>We would welcome your ideas — for changes or additions — that might get more of the American people on board. Please type your suggestions in here.</p>
           </div>
