@@ -111,11 +111,6 @@ const [readyToSubmit, setReadyToSubmit] = useState(false);
 const [ratingsSubmitted, setRatingsSubmitted] = useState(false);
 const [submitPromptShown, setSubmitPromptShown] = useState(false);
 const [isSubmittingRatings, setIsSubmittingRatings] = useState(false);
-const [bucketsOpen, setBucketsOpen] = useState(true);
-
-const shouldCollapseBuckets =
-  (totalAssigned === totalProposals && !readyToSubmit && !submitted) // submit-prompt stage
-  || reflectionStep === 3;                                           // reflection text stage
 
 const scrollToFirstCategory = () => {
   setExpandedCategories(prev => ({ ...prev, 'Economic Mobility and Growth': true }));
@@ -166,10 +161,6 @@ useEffect(() => {
     console.log('Generated session_id on mount:', session_id);  // Debug log
   }, []);
 
-
-  useEffect(() => {
-  setBucketsOpen(!shouldCollapseBuckets);
-}, [shouldCollapseBuckets]);
 
 useEffect(() => {
   if ((reflectionStep === 2 || reflectionStep === 3) && reflectionStep2Ref.current) {
@@ -574,130 +565,61 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
 )}
 
 {!(readyToSubmit && reflectionStep === 2) && (
-  <>
-    {shouldCollapseBuckets ? (
-      <>
-        {/* Center the toggle button */}
-        <div className="mb-4 flex justify-center">
-          <button
-            onClick={() => setBucketsOpen(o => !o)}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50"
-            aria-expanded={bucketsOpen}
-          >
-            <span>{bucketsOpen ? 'Hide your ratings' : `Show your ratings (${totalAssigned})`}</span>
-            <ChevronDown
-              size={16}
-              className={`transition-transform ${bucketsOpen ? 'rotate-180' : ''}`}
-            />
-          </button>
-        </div>
-
-        {/* Collapsible area lives OUTSIDE the centered flex */}
-        <AnimatePresence initial={false}>
-          {bucketsOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.2 }}
-              className="mb-6"
-            >
-              <div className="flex flex-col lg:flex-row gap-4">
-                {buckets.map(bucket => (
-                  <div
-                    key={bucket}
-                    className="relative bg-white border border-gray-200 rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
-                  >
-                    <div className="absolute top-0 left-0 h-1 w-full rounded-t-md bg-gray-400" />
-                    <h2 className="text-sm font-semibold text-gray-800 tracking-wide pt-2">{bucket}</h2>
-                    <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-                      {Object.entries(assignments)
-                        .filter(([_, b]) => b === bucket)
-                        .map(([id]) => {
-                          const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
-                          if (!proposal) return null;
-                          const category = Object.entries(proposalsData).find(([cat, list]) =>
-                            list.some(p => p.id.toString() === id)
-                          )?.[0];
-                          if (category === 'Federal Spending & Debt' && proposal.title === '') return null;
-                          const bg = categoryColors[category] || '#eee';
-                          return (
-                            <div
-                              key={id}
-                              className="p-2 rounded text-xs shadow-sm border border-gray-300 flex justify-between items-start gap-2"
-                              style={{ backgroundColor: `${bg}1A` }}
-                            >
-                              <div className="flex justify-between items-center gap-2">
-                                <span className="whitespace-pre-line">{proposal.title}</span>
-                                {!(ratingsSubmitted && totalAssigned === totalProposals) && (
-                                  <button
-                                    onClick={() => handleUnassign(id)}
-                                    className="text-gray-500 hover:text-red-500"
-                                    title="Remove from bucket"
-                                  >
-                                    <X size={20} />
-                                  </button>
-                                )}
-                              </div>
-                            </div>
-                          );
-                        })}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </>
-    ) : (
       <div className="flex flex-col lg:flex-row gap-4 mb-6">
-        {buckets.map(bucket => (
-          <div
-            key={bucket}
-            className="relative bg-white border border-gray-200 rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
-          >
-            <div className="absolute top-0 left-0 h-1 w-full rounded-t-md bg-gray-400" />
-            <h2 className="text-sm font-semibold text-gray-800 tracking-wide pt-2">{bucket}</h2>
-            <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
-              {Object.entries(assignments)
-                .filter(([_, b]) => b === bucket)
-                .map(([id]) => {
-                  const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
-                  if (!proposal) return null;
-                  const category = Object.entries(proposalsData).find(([cat, list]) =>
-                    list.some(p => p.id.toString() === id)
-                  )?.[0];
-                  if (category === 'Federal Spending & Debt' && proposal.title === '') return null;
-                  const bg = categoryColors[category] || '#eee';
-                  return (
-                    <div
-                      key={id}
-                      className="p-2 rounded text-xs shadow-sm border border-gray-300 flex justify-between items-start gap-2"
-                      style={{ backgroundColor: `${bg}1A` }}
-                    >
-                      <div className="flex justify-between items-center gap-2">
-                        <span className="whitespace-pre-line">{proposal.title}</span>
-                        {!(ratingsSubmitted && totalAssigned === totalProposals) && (
-                          <button
-                            onClick={() => handleUnassign(id)}
-                            className="text-gray-500 hover:text-red-500"
-                            title="Remove from bucket"
-                          >
-                            <X size={20} />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
-  </>
+  {buckets.map(bucket => (
+    <div
+  key={bucket}
+      className="relative bg-white border border-gray-200 rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
+    >
+      <div
+  className="absolute top-0 left-0 h-1 w-full rounded-t-md bg-gray-400"
+/>
+      <h2 className="text-sm font-semibold text-gray-800 tracking-wide pt-2">
+        {bucket}
+      </h2>
+      <div className="space-y-2 max-h-[250px] overflow-y-auto pr-1">
+
+        {Object.entries(assignments)
+          .filter(([_, b]) => b === bucket)
+          .map(([id]) => {
+            const proposal = Object.values(proposalsData).flat().find(p => p.id.toString() === id);
+            if (!proposal) return null;
+
+            const category = Object.entries(proposalsData).find(([cat, list]) =>
+              list.some(p => p.id.toString() === id)
+            )?.[0];
+
+            // 🛑 Skip rendering individual assignments for 'Federal Spending & Debt'
+            if (category === 'Federal Spending & Debt' && proposal.title === '') return null;
+
+            const bg = categoryColors[category] || '#eee';
+            return (
+              <div
+  key={id}
+  className="p-2 rounded text-xs shadow-sm border border-gray-300 flex justify-between items-start gap-2"
+  style={{ backgroundColor: `${bg}1A` }} // 10% tint of the category color
+>
+  <div className="flex justify-between items-center gap-2">
+    <span className="whitespace-pre-line">{proposal.title}</span>
+    {!(ratingsSubmitted && totalAssigned === totalProposals) && (
+  <button
+    onClick={() => handleUnassign(id)}
+    className="text-gray-500 hover:text-red-500"
+    title="Remove from bucket"
+  >
+    <X size={20} />
+  </button>
 )}
+  </div>
+</div>
+            );
+          })}
+      </div>
+    </div>
+  ))}
+</div>
+)}
+
 
 {(() => {
   if (totalAssigned === totalProposals && !readyToSubmit && !submitted) {
@@ -710,7 +632,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
   <div className="bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-5">
     <div className="text-center mt-6 mb-8">
       <p className="mb-4 text-lg text-gray-700">
-        If you want to change any of your ratings, you can go to the top of the page, click 'Show your ratings' and 'x' those proposals. Then, you can re-rate those items.
+        If you have changed your mind about any ratings, you can go to the top of the page to 'x' those proposals. Then, you can re-rate those items.
       </p>
       <p className="mb-4 text-lg text-gray-700">
         When you're ready, click <strong>Submit My Ratings</strong>.
@@ -790,7 +712,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
             <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
             <p>To that end, we keep testing variations.</p>
             <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
-            <p>We would welcome your suggestions that might draw in even more of the American people.</p>
+            <p>We would welcome your ideas — for changes or additions — that might get more of the American people on board. Please type your suggestions in here.</p>
           </div>
 
           <textarea
