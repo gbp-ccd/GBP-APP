@@ -581,7 +581,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
         <div className="mb-4 flex justify-center">
           <button
             onClick={() => setBucketsOpen(o => !o)}
-            className="inline-flex items-center gap-2 px-3 py-2 rounded border border-gray-300 text-sm hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-3 py-2 font-bold rounded border border-gray-300 text-lg hover:bg-gray-50"
             aria-expanded={bucketsOpen}
           >
             <span>{bucketsOpen ? 'Hide your ratings' : `Show your ratings (${totalAssigned})`}</span>
@@ -606,7 +606,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
                 {buckets.map(bucket => (
                   <div
                     key={bucket}
-                    className="relative bg-white border border-gray-200 rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
+                    className="relative bg-white border border-gray-200 font-bold rounded-md p-3 flex-1 min-w-[180px] text-left shadow-sm"
                   >
                     <div className="absolute top-0 left-0 h-1 w-full rounded-t-md bg-gray-400" />
                     <h2 className="text-sm font-semibold text-gray-800 tracking-wide pt-2">{bucket}</h2>
@@ -739,7 +739,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
         <div className="space-y-5 text-base sm:text-lg text-gray-800">
           <div className="rounded text-base sm:text-lg text-gray-800">
             <p className="text-base sm:text-lg font-bold mb-4">
-              Our goal is to empower you — so you and your allies can tell lawmakers from both parties:
+              Our goal is to empower you — so that you and your allies can tell lawmakers from both parties:
             </p>
             <p className="text-base sm:text-lg">
              <em>These reforms will advance the aspirations that Americans all share.</em>
@@ -794,7 +794,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
           </div>
 
           <textarea
-            className="w-full border border-gray-300 rounded p-2 text-sm mb-4 space-y-3"
+            className="w-full border border-gray-300 font-semibold rounded p-2 text-base sm:text-lg mb-4 space-y-3"
             rows={4}
             placeholder="Please type your suggestions here..."
             value={reflectionAnswers.q3}
@@ -1203,7 +1203,7 @@ One simple question. To get the policy reforms that you see as critical to you, 
               {category === 'Healthcare' && (<>Stop paying doctors and other providers for the volume of tests and procedures they perform and, instead, pay for improving health outcomes at lower cost. Incentivize Americans to eat healthy foods.</>)}
               {category === 'Energy Policy' && (<> Encourage businesses, families, state governments and other countries to use energy efficiently by ending wasteful subsidies, mandates and regulations.  Reduce extreme droughts, floods, hurricanes, blizzards and wildfires by taxing carbon emissions. Transmit energy in ways that minimize the costs to consumers.</>)}
               {category === 'Taxes' && (<>To pay for the benefits in health, education and economic opportunity described in earlier sections, raise taxes on those who can most afford it. <br /><br />Eliminate complexity that invites tax evasion. Reward businesses for investing in assets that will increase productivity and future income. Make entitlement spending more efficient.</>)}
-              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. To that end: <br /><br /> The reforms in the Healthcare section would boost productivity, yielding $200 billion in annual savings<br />Our proposal to end wasteful energy subsidies would save $200 billion yearly<br /> The 5% VAT and market-based carbon pricing would yield $400 billion in revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would provide $500 billion a year. <br /></>)}
+              {category === 'Federal Spending & Debt' && (<>To keep the debt at or below 100% of GDP, the government needs to boost revenue and/or cut spending by about $800 billion a year. <br /><br />To that end: <br /><br /> The reforms in the Healthcare section would boost productivity, yielding $200 billion in annual savings<br />Our proposal to end wasteful energy subsidies would save $200 billion yearly<br /> The 5% VAT and market-based carbon pricing would yield $400 billion in annual revenue<br /><br />And to pay for new investments in mobility, education and preventive care, our proposal to slash tax deductions for the well-off would provide $500 billion a year. <br /></>)}
               <div className="flex flex-wrap gap-2 mt-4">
                 {buckets.map(bucket => (
                   <button
