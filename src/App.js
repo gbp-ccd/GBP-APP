@@ -80,7 +80,7 @@ We thereby squander at least $2.3 trillion each year - which boosts the national
 
 'Taxes': `THE PROBLEM: Politicians from both parties routinely provide their strongest supporters with tax breaks, which boost the national debt and reward wasteful investments.`,
 
-   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036, which would send interest rates soaring, hobbling our economy. Yet both political parties have let the problem grow steadily worse for decades.`
+   'Federal Spending & Debt': `THE PROBLEM: The US government spends $6 per senior for every $1 on a child under 18; favors consumption over investing in the future; and gives tax breaks to favored interests. This puts the federal debt on track to reach 130% of GDP by 2036, which would send interest rates soaring and hobble our economy. Yet both political parties have let the problem grow steadily worse for decades.`
 
 };
 
