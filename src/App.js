@@ -237,37 +237,41 @@ useEffect(() => {
   console.log('Using session_id for initial submission:', session_id);  // Debug log
 
  
-  // Call it only when needed, like this:
-  // DO NOT auto-submit on mount. Only submit from a controlled event.
-
-  const handleFinalSubmit = async (e) => {
+// Replace your existing handleFinalSubmit with this:
+const handleFinalSubmit = async (e) => {
   e.preventDefault();
   setIsSubmittingFinalForm(true);
 
-  const { fname, lname, email, zip } = formData;
   const session_id = sessionId;
-
   if (!session_id) {
     console.error('Missing session_id:', { session_id });
     setIsSubmittingFinalForm(false);
     return;
   }
 
-try {
-  await createRecord('details', {
-    session_id,
-    fname,
-    lname,
-    email,
-    zip,
-  });
-  console.log('Details submission successful');
-  setSubmitted(true);
-} catch (err) {
-  console.error('Error inserting details into Airtable:', err);
-} finally {
-  setIsSubmittingFinalForm(false);
-}
+  const fname = (formData.fname || '').trim();
+  const lname = (formData.lname || '').trim();
+  const email = (formData.email || '').trim().toLowerCase();
+  const zip   = (formData.zip || '').trim();
+
+  try {
+    // write to `submissions` matched on session_id
+    await upsertFields(session_id, {
+      fname,
+      lname,
+      email,
+      zip,
+      version: APP_VERSION,
+      submitted_at: new Date().toISOString(),
+    });
+
+    console.log('Details saved to submissions');
+    setSubmitted(true);
+  } catch (err) {
+    console.error('Error upserting details into submissions:', err);
+  } finally {
+    setIsSubmittingFinalForm(false);
+  }
 };
   const isAssigned = (proposalId) => assignments.hasOwnProperty(proposalId);
   const progressPercent = (totalAssigned / totalProposals) * 100;
