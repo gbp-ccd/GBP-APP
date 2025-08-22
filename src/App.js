@@ -738,18 +738,18 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
       {reflectionStep === 2 && (
         <div className="space-y-5 text-base sm:text-lg text-gray-800">
           <div className="rounded text-base sm:text-lg text-gray-800">
-            <p className="text-base sm:text-lg font-bold mb-4">
-              Our goal is to empower you — so that you and your allies can tell lawmakers from both parties:
+            <p className="text-base sm:text-lg mb-4">
+              In July, 77% of voters using this App saw the benefits of the current package as valuable enough to accept the drawbacks.  They chose this Grand Bargain over the country’s current direction.
             </p>
-            <p className="text-base sm:text-lg">
-             <em>These reforms will advance the aspirations that Americans all share.</em>
+             <p className="text-base sm:text-lg font-bold mb-4">
+             Our ultimate goal is to give you and your allies the power to tell lawmakers from both parties:
             </p>
           <p className="text-base sm:text-lg mb-4">
-             <em>Make this package a priority – or we'll elect someone who will.</em>
+             <em>Americans all share these aspirations. So, make this package of reforms a priority – or we'll elect someone who will.</em>
           </p>
           </div>
           <p className="text-base sm:text-lg mb-4">
-            So, which would you prefer: Telling members of Congress to work on this evolving Grand Bargain – or leave it up to them to decide your future?
+            So, which would you prefer: Telling members of Congress to start working on this evolving Grand Bargain – or leave your future in their hands?
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-left">
@@ -774,7 +774,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
               disabled={reflectionAnswers.q2 !== '' || isSubmittingQ2}
               onClick={() => handleChooseQ2(false)}
             >
-              {isSubmittingQ2 ? 'Submitting...' : 'Whatever Congress Decides'}
+              {isSubmittingQ2 ? 'Submitting...' : 'Whatever Congress Wants'}
             </button>
           </div>
         </div>
@@ -789,8 +789,7 @@ const handleChooseQ2 = async (choice /* boolean: true=Grand Bargain, false=Whate
             <p>The reason: Most Congresspeople blame the other party for our country’s ills and offer sound bites as remedies, instead of working together on genuine solutions.</p>
             <p>To fix this situation, we the American people need to find a total package that 75% or more of us support.</p>
             <p>To that end, we keep testing variations.</p>
-            <p>In July, 77% of voters using this App saw the benefits as valuable enough to accept the drawbacks. They chose this package over the country’s current direction.</p>
-            <p>We would welcome your suggestions that might draw in even more of the American people.</p>
+            <p>We welcome ideas that might draw in even more of the American people.</p>
           </div>
 
           <textarea
